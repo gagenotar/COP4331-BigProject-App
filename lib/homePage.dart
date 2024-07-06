@@ -99,23 +99,21 @@ class HomeScreen extends HookWidget {
       ),
         body: ListView(
 
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
 
           children: <Widget>[
 
             Container(
-              height: 150,
+             // // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User A - Time',
@@ -123,50 +121,41 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                          'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+
+                    ExpandableText(text: 'All human beings are born free and equal in dignity and rights. They are endowed with reason and conscience and should act towards one another in a spirit of brotherhood.'),
                   ],
                 ),
               ),
             ),
 
-
             Divider(),
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
-                          'User B- Time',
+                          'User B - Time',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4,overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone is entitled to all the rights and freedoms set forth in this Declaration, without distinction of any kind, such as race, colour, sex, language, religion, political or other opinion, national or social origin, property, birth or other status. Furthermore, no distinction shall be made on the basis of the political, jurisdictional or international status of the country or territory to which a person belongs, whether it be independent, trust, non-self-governing or under any other limitation of sovereignty.'),
                   ],
                 ),
               ),
@@ -174,50 +163,48 @@ class HomeScreen extends HookWidget {
             Divider(),
 
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
-                          'User C- Time ',
+                          'User C - Time',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image(
+                      image: AssetImage('assets/images/test-photo.png'),
+                        fit: BoxFit.contain,
                       ),
                     ),
+                    ExpandableText(text: 'Everyone has the right to life, liberty and security of person.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User D - Time',
@@ -225,31 +212,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'No one shall be held in slavery or servitude; slavery and the slave trade shall be prohibited in all their forms.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User E - Time',
@@ -257,31 +241,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'No one shall be subjected to torture or to cruel, inhuman or degrading treatment or punishment.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User F - Time',
@@ -289,31 +270,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone has the right to recognition everywhere as a person before the law.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User G - Time',
@@ -321,31 +299,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'All are equal before the law and are entitled without any discrimination to equal protection of the law. All are entitled to equal protection against any discrimination in violation of this Declaration and against any incitement to such discrimination.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User H - Time',
@@ -353,31 +328,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone has the right to an effective remedy by the competent national tribunals for acts violating the fundamental rights granted him by the constitution or by law.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User I - Time',
@@ -385,31 +357,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'No one shall be subjected to arbitrary arrest, detention or exile.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User J - Time',
@@ -417,31 +386,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User K - Time',
@@ -449,31 +415,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone charged with a penal offence has the right to be presumed innocent until proved guilty according to law in a public trial at which he has had all the guarantees necessary for his defence.No one shall be held guilty of any penal offence on account of any act or omission which did not constitute a penal offence, under national or international law, at the time when it was committed. Nor shall a heavier penalty be imposed than the one that was applicable at the time the penal offence was committed.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User L - Time',
@@ -481,31 +444,57 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        child: Text(
+                          'User M - Time',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                     Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
+                    ),
+                    ExpandableText(text: 'Everyone has the right to freedom of movement and residence within the borders of each state.Everyone has the right to leave any country, including his own, and to return to his country.'),
+                  ],
+                ),
+              ),
+            ),
+            Divider(),
+
+            Container(
+              // height: 700,
+              width: 468,
+              color: Colors.amber[100],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+
+                    Align(
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User N - Time',
@@ -513,31 +502,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone has the right to seek and to enjoy in other countries asylum from persecution.This right may not be invoked in the case of prosecutions genuinely arising from non-political crimes or from acts contrary to the purposes and principles of the United Nations'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User O - Time',
@@ -545,31 +531,28 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Everyone has the right to a nationality.No one shall be arbitrarily deprived of his nationality nor denied the right to change his nationality'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User P - Time',
@@ -577,31 +560,29 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
+                    ExpandableText(text: 'Men and women of full age, without any limitation due to race, nationality or religion, have the right to marry and to found a family. They are entitled to equal rights as to marriage, during marriage and at its dissolution.Marriage shall be entered into only with the free and full consent of the intending spouses.The family is the natural and fundamental group unit of society and is entitled to protection by society and the State.'),
                   ],
                 ),
               ),
-            ),Divider(),
+            ),
+
+            Divider(),
+
             Container(
-              height: 150,
+              // height: 700,
+              width: 468,
               color: Colors.amber[100],
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
+
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
+                      alignment: Alignment.topLeft,
                       child: Container(
                         child: Text(
                           'User Q - Time',
@@ -609,110 +590,11 @@ class HomeScreen extends HookWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),Divider(),
-            Container(
-              height: 150,
-              color: Colors.amber[100],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
                     Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/test-photo.png'),
                     ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
-                      child: Container(
-                        child: Text(
-                          'User R - Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),Divider(),
-            Container(
-              height: 150,
-              color: Colors.amber[100],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
-                      child: Container(
-                        child: Text(
-                          'User S - Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),Divider(),
-            Container(
-              height: 150,
-              color: Colors.amber[100],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
-                    Align(
-                      alignment: Alignment(0.0, -0.8),
-                      child: Container(
-                        child: Text(
-                          'User T - Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment(0.0, 0.1),
-                        child: Text(
-                            'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.',maxLines: 4, overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
+                    ExpandableText(text: 'Everyone has the right to own property alone as well as in association with others.No one shall be arbitrarily deprived of his property.'),
                   ],
                 ),
               ),
@@ -723,4 +605,44 @@ class HomeScreen extends HookWidget {
         );
      // );
   }
+}
+
+class ExpandableText extends StatefulWidget {
+  final String text;
+
+  ExpandableText({required this.text});
+  @override
+  _ExpandableTextState createState() => _ExpandableTextState();
+}
+
+class _ExpandableTextState extends State<ExpandableText> {
+  bool _expanded = false;
+
+  void toggleExpanded() {
+    setState(() {
+      _expanded = !_expanded;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: toggleExpanded,
+      child: AnimatedCrossFade(
+        duration: Duration(milliseconds: 300),
+        crossFadeState: _expanded
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        firstChild: Text(
+          widget.text,
+        ),
+        secondChild: Text(
+          widget.text,
+          maxLines: _expanded ? null : 4,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+}
 }
