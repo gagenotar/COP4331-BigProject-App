@@ -5,6 +5,7 @@ import 'package:bson/bson.dart';
 
 class ApiService{
   static const String baseUrl = 'https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api'; // Replace with your server URL
+
   //login
    static Future<Map<String, dynamic>> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/login');
@@ -17,17 +18,19 @@ class ApiService{
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
-      } else if (response.statusCode == 404) {
-        throw Exception('Invalid credentials');
-      } else {
-        throw Exception('Failed to login');
+        } 
+        else if (response.statusCode == 404) {
+          throw "Username or Password is incorrect.";
+        } 
+        else {
+          throw "Had trouble connecting. Try again later";
+        }
+      } on http.ClientException {
+        throw "Had trouble connecting. Try again later";
       }
-    } catch (e) {
-      throw Exception('Failed to connect to server: $e');
-    }
   }
 
-    //register
+  //register
   static Future<Map<String, dynamic>> register
     ( String firstName, String lastName, String
     email, String
@@ -43,9 +46,6 @@ class ApiService{
 
         if (response.statusCode == 200) {
         return jsonDecode(response.body);
-        } 
-        else if (response.statusCode == 404) {
-          throw "Username or Password is incorrect.";
         } 
         else {
           throw "Had trouble connecting. Try again later";
