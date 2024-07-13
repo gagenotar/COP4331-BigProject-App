@@ -1,14 +1,29 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:journey_journal_app/homePage.dart';
-import 'package:journey_journal_app/register_page.dart';
+import 'package:journey_journal_app/components/api_service.dart';
+import 'package:journey_journal_app/components/l_r_entry_box.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+import 'package:journey_journal_app/pages/home_page.dart';
+import 'package:journey_journal_app/pages/register_page.dart';
+
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,31 +105,30 @@ class LoginPage extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               height: 40,
-              child: FilledButton(
-                onPressed: () {
-                  String email = _emailController.text;
-                  String password = _passwordController.text;
-                    
-                  // Perform login logic here
-                  if (email.isNotEmpty && password.isNotEmpty) {
-                    // for debug purposes, it is routing to the home page with any input in email and password
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
-                  } 
-                  else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter email and password')),
-                    );
-                  }
-                },
-                child: const Text(
-                  'Log In',
-                  style: TextStyle(
-                      fontSize: 18,
-                  )
-                ),
+              child: FilledButton.icon(
+                onPressed: _isLoading ? null : _doLogin,
+                
+                icon: _isLoading 
+                    ? Container(
+                        width: 24,
+                        height: 24,
+                        padding: const EdgeInsets.all(2.0),
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : null,
+
+                label: !_isLoading
+                      ? const Text(
+                          'Log In',
+                          style: TextStyle(
+                          fontSize: 18,
+                          )
+                        )
+                      : const Text(''),
+
               ),
             ),
           ),
@@ -130,7 +144,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegisterPage()),
+                    MaterialPageRoute(builder: (context) => const RegisterPage()),
                   );
                 }, 
                 child: RichText(
@@ -160,44 +174,36 @@ class LoginPage extends StatelessWidget {
       )
     );
   }
-}
 
-class LREntryBox extends StatelessWidget {
+  void _doLogin() async{
+    String email = _emailController.text;
+    String password = _passwordController.text;
+      
+    // Perform login logic here
+    if (email.isNotEmpty && password.isNotEmpty) {
+    
+      setState(() => _isLoading = false);
 
-  const LREntryBox({
-    super.key,
-    required this.textController,
-    required this.label,
-    this.keyboard = 'text',
-    this.isPassword = false
-  });
+      var credentials = ApiService.login(email, password);
 
-  static final fieldType = {
-    'email': TextInputType.emailAddress,
-    'name': TextInputType.name,
-    'password': TextInputType.visiblePassword,
-    'text': TextInputType.text,
-  };
-
-  final TextEditingController textController;
-  final String label;
-
-  final String keyboard;
-  final bool isPassword;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical:10, horizontal:50),
-      child: TextField(
-        controller: textController,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
-        keyboardType: fieldType[keyboard],
-        obscureText: isPassword
-      ),
-    );
+      credentials.then((var value){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen(credentials: value))
+        );
+      }).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e)),
+        );
+      });
+      
+      
+    }
+    
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter email, username, and password')),
+      );
+    }
   }
 }

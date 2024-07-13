@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:journey_journal_app/login_page.dart';
+import 'package:journey_journal_app/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: Colors.yellow.shade50,
+        //scaffoldBackgroundColor: Colors.yellow.shade50,
         primarySwatch: Colors.blue,
 
         colorScheme: ColorScheme.fromSeed(

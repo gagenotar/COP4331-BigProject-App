@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:journey_journal_app/homePage.dart';
-import 'package:journey_journal_app/login_page.dart';
+import 'package:journey_journal_app/pages/login_page.dart';
 
-class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+import 'package:journey_journal_app/components/api_service.dart';
+import 'package:journey_journal_app/components/l_r_entry_box.dart';
 
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _firstNameController = TextEditingController();
+
   final TextEditingController _lastNameController = TextEditingController();
+
   final TextEditingController _usernameController = TextEditingController();
+
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -107,35 +120,30 @@ class RegisterPage extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               height: 40,
-              child: FilledButton(
-                onPressed: () {
-                  String firstName = _firstNameController.text;
-                  String lastName = _lastNameController.text;
-                  String email = _emailController.text;
-                  String username = _usernameController.text;
-                  String password = _passwordController.text;
-                    
-                  // Perform login logic here
-                  if (email.isNotEmpty && username.isNotEmpty && password.isNotEmpty) {
-                    // for debug purposes, it is routing to the home page with any input in email, username, and password
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
-                  }
+              child: FilledButton.icon(
+                onPressed: _isLoading ? null : _doRegister,
+                
+                icon: _isLoading 
+                    ? Container(
+                        width: 24,
+                        height: 24,
+                        padding: const EdgeInsets.all(2.0),
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : null,
 
-                  else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter email, username, and password')),
-                    );
-                  }
-                },
-                child: const Text(
-                  'Sign Up',
-                  style: TextStyle(
-                      fontSize: 18,
-                  )
-                ),
+                label: !_isLoading
+                      ? const Text(
+                          'Sign Up',
+                          style: TextStyle(
+                          fontSize: 18,
+                          )
+                        )
+                      : const Text(''),
+
               ),
             ),
           ),
@@ -181,5 +189,37 @@ class RegisterPage extends StatelessWidget {
         ]
       )
     );
+  }
+
+  void _doRegister() async{
+    String firstName = _firstNameController.text;
+    String lastName = _lastNameController.text;
+    String email = _emailController.text;
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    // Perform login logic here
+    if (email.isNotEmpty && username.isNotEmpty && password.isNotEmpty) {
+    
+      setState(() => _isLoading = true);
+      var post = ApiService.register(firstName, lastName, email, username, password);
+
+      post.then((var res) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      }).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e)),
+        );
+      });
+    } 
+    else {
+      _isLoading = false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter email, username, and password')),
+      );
+    }
   }
 }
