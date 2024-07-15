@@ -3,12 +3,14 @@ import 'package:journey_journal_app/components/post.dart';
 import 'package:journey_journal_app/pages/home_page.dart';
 
 class SettingsPage extends StatelessWidget {
+  final String email;
   final Map<String, dynamic> credentials;
   final String defaultProfileImage = 'assets/images/profile-pic.png'; // Path to default profile image
 
   const SettingsPage({
     Key? key,
     required this.credentials,
+    required this.email,
   }) : super(key: key);
 
   @override
@@ -34,13 +36,13 @@ class SettingsPage extends StatelessWidget {
             ),
             SizedBox(height: 20), // Optional spacing after the image
             Divider(),
-            Text('First Name: ${credentials['firstName']}'),
+            Text('First Name: ${credentials['firstName']}', style: TextStyle(fontSize: 16.0)),
             Divider(),
-            Text('Last Name: ${credentials['lastName']}'),
+            Text('Last Name: ${credentials['lastName']}', style: TextStyle(fontSize: 16.0)),
             Divider(),
-            Text('Username: ${credentials['login']}'),
+            Text('Username: ${credentials['login']}', style: TextStyle(fontSize: 16.0)),
             Divider(),
-            Text('Email:  ${credentials['email']} '),
+            Text('Email:  $email ', style: TextStyle(fontSize: 16.0)),
             Divider(),
             // Additional Text widgets as needed
           ],
