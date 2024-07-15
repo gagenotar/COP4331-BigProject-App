@@ -7,10 +7,12 @@ import 'package:journey_journal_app/pages/settings_page.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
-    required this.credentials
-    });
+    required this.credentials,
+    required this.email,
+  });
 
   final Map<String, dynamic> credentials;
+  final String email;
 
   @override
   HomeScreenState createState() => HomeScreenState();
@@ -115,17 +117,8 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildProfileScreen() {
-    String firstName = widget.credentials['firstName'];
-    if (firstName == "") {
-      firstName = widget.credentials['username'];
-    }
 
-    String lastName = widget.credentials['lastName'];
-
-    String userName = widget.credentials['login'];
-
-   // String email = widget.credentials['email'];
-    return SettingsPage(credentials: widget.credentials);
+    return SettingsPage( credentials: widget.credentials,
+      email: widget.email,);
   }
 }
-
