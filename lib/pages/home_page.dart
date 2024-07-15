@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:journey_journal_app/components/post.dart';
+import 'package:journey_journal_app/components/api_service.dart';
+import 'package:journey_journal_app/pages/settings_page.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -26,7 +28,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     String name = widget.credentials['firstName'];
     if (name == "") {
       name = widget.credentials['username'];
@@ -39,12 +41,12 @@ class HomeScreenState extends State<HomeScreen> {
                 height:40,
                 width:40,
                 child: Image.asset(
-                  'assets/images/logo.png', 
+                  'assets/images/logo.png',
                   fit: BoxFit.scaleDown,
                 )
           ),
         ),
-        title: Text('Hello $name.'),
+        title: Text('Hello $name'),
       ),
 
       bottomNavigationBar: BottomNavigationBar(
@@ -68,6 +70,7 @@ class HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle,color: Color.fromRGBO(38, 38, 38, 0.4),),
             label: 'Profile',
+
           ),
         ],
       ),
@@ -112,9 +115,17 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildProfileScreen() {
-    return Center(
-      child: Text('Profile Screen'),
-    );
+    String firstName = widget.credentials['firstName'];
+    if (firstName == "") {
+      firstName = widget.credentials['username'];
+    }
+
+    String lastName = widget.credentials['lastName'];
+
+    String userName = widget.credentials['login'];
+
+   // String email = widget.credentials['email'];
+    return SettingsPage(credentials: widget.credentials);
   }
 }
 
