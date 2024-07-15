@@ -175,34 +175,34 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _doLogin() async{
+  void _doLogin() async {
     String email = _emailController.text;
     String password = _passwordController.text;
-      
+
     // Perform login logic here
     if (email.isNotEmpty && password.isNotEmpty) {
-    
-      setState(() => _isLoading = false);
+      setState(() => _isLoading = true); // Set loading state
 
-      var credentials = ApiService.login(email, password);
+      try {
+        var credentials = await ApiService.login(email, password);
 
-      credentials.then((var value){
+        // Navigate to HomeScreen and pass credentials
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen(credentials: value))
+          MaterialPageRoute(builder: (context) => HomeScreen(
+            credentials: credentials,
+            email: email, // Pass email to HomeScreen
+          )),
         );
-      }).catchError((e) {
+      } catch (e) {
+        setState(() => _isLoading = false); // Reset loading state on error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e)),
+          SnackBar(content: Text(e.toString())),
         );
-      });
-      
-      
-    }
-    
-    else {
+      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email, username, and password')),
+        const SnackBar(content: Text('Please enter email and password')),
       );
     }
   }
