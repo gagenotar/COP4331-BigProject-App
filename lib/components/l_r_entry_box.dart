@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class LREntryBox extends StatelessWidget {
 
@@ -7,7 +8,9 @@ class LREntryBox extends StatelessWidget {
     required this.textController,
     required this.label,
     this.keyboard = 'text',
-    this.isPassword = false
+    this.isPassword = false,
+    this.validator,
+    this.autovalidate = false
   });
 
   static final fieldType = {
@@ -17,17 +20,21 @@ class LREntryBox extends StatelessWidget {
     'text': TextInputType.text,
   };
 
+
   final TextEditingController textController;
   final String label;
 
   final String keyboard;
   final bool isPassword;
 
+  final FieldValidator? validator;
+  final bool autovalidate;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical:10, horizontal:50),
-      child: TextField(
+      child: TextFormField(
         controller: textController,
         decoration: InputDecoration(
           labelText: label,
@@ -37,7 +44,9 @@ class LREntryBox extends StatelessWidget {
         obscureText: isPassword,
         onTapOutside: (event) {
                     FocusManager.instance.primaryFocus?.unfocus();
-        }
+        },
+        validator: validator?.call,
+        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction: AutovalidateMode.disabled
       ),
     );
   }
