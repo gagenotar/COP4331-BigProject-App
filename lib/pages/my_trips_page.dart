@@ -1,114 +1,209 @@
 import 'package:flutter/material.dart';
-import 'api_service.dart';
-import 'list_view_tab.dart';
-import 'folder_view_tab.dart';
-import 'map_view_tab.dart';
+import '../models/trip.dart';
+import '../models/folder.dart';
+import '../services/api_service.dart';
+import '../widgets/trip_list_item.dart';
+import '../widgets/folder_grid_item.dart';
 
 class MyTripsPage extends StatefulWidget {
   final String userId;
-
-  MyTripsPage({required this.userId});
+  const MyTripsPage({super.key, required this.userId});
 
   @override
-  _MyTripsPageState createState() => _MyTripsPageState();
+  MyTripsPageState createState() => MyTripsPageState();
 }
 
-class _MyTripsPageState extends State<MyTripsPage> {
-  final ApiService apiService = ApiService();
-  List<Map<String, dynamic>> allTrips = [];
+class MyTripsPageState extends State<MyTripsPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  List<Trip> _trips = [];
+  List<Folder> _folders = [];
+  bool _isLoading = false;
+  String _error = '';
+
 
   @override
   void initState() {
     super.initState();
-    fetchTrips();
+    _tabController = TabController(length: 3, vsync: this);
+    _fetchTrips();
+    _fetchFolders();
   }
 
-  void fetchTrips() async {
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchTrips() async {
+    setState(() {
+      _isLoading = true;
+      _error = '';
+    });
+
     try {
-      final trips = await apiService.getTrips(widget.userId);
+      final result = await ApiService.searchMyEntries('', widget.userId);
+      final List<dynamic> tripsJson = result['results'] ?? [];
       setState(() {
-        allTrips = trips;
+        _trips = tripsJson.map((json) => Trip.fromJson(json)).toList();
+        _isLoading = false;
       });
     } catch (e) {
-      // Handle error
-      print("Error fetching trips: $e");
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
     }
   }
 
-  void addTrip(Map<String, dynamic> trip) async {
-    try {
-      await apiService.addTrip(trip);
-      fetchTrips();
-    } catch (e) {
-      // Handle error
-      print("Error adding trip: $e");
-    }
-  }
-
-  void updateTrip(int index, Map<String, dynamic> trip) async {
-    try {
-      await apiService.updateTrip(allTrips[index]['_id'], trip);
-      fetchTrips();
-    } catch (e) {
-      // Handle error
-      print("Error updating trip: $e");
-    }
-  }
-
-  void deleteTrip(int index) async {
-    try {
-      await apiService.deleteTrip(allTrips[index]['_id']);
-      fetchTrips();
-    } catch (e) {
-      // Handle error
-      print("Error deleting trip: $e");
-    }
-  }
-
-  void addToFolder(String folderName, Map<String, dynamic> trip) {
-    // Your logic to add to folder
-  }
-
-  void updateAllTrips(List<Map<String, dynamic>> updatedTrips) {
+  Future<void> _fetchFolders() async {
+    // TODO: Implement folder fetching from API
     setState(() {
-      allTrips = updatedTrips;
+      _folders = [
+        Folder(id: '1', name: 'Summer 2024'),
+        Folder(id: '2', name: 'NYC'),
+        Folder(id: '3', name: 'Restaurants'),
+      ];
     });
+  }
+
+  Future<void> _deleteTrip(String tripId) async {
+    try {
+      await ApiService.deleteEntry(tripId);
+      setState(() {
+        _trips.removeWhere((trip) => trip.id == tripId);
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Error deleting trip: $e';
+      });
+    }
+  }
+
+  Future<void> _editTrip(Trip trip) async {
+    // TODO: Implement edit functionality
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('My Trips'),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: 'List View'),
-              Tab(text: 'Folder View'),
-              Tab(text: 'Map View'),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Journey Journal'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              // TODO: Implement search functionality
+            },
           ),
-        ),
-        body: TabBarView(
-          children: [
-            ListViewTab(
-              allTrips: allTrips,
-              addToFolder: addToFolder,
-              addTrip: addTrip,
-              updateTrip: updateTrip,
-              deleteTrip: deleteTrip,
-            ),
-            FolderViewTab(
-              allTrips: allTrips,
-              updateAllTrips: updateAllTrips,
-              updateTrip: updateTrip,
-              deleteTrip: deleteTrip,
-            ),
-            MapViewTab(),
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'List View'),
+            Tab(text: 'Folder View'),
+            Tab(text: 'Map View'),
           ],
         ),
       ),
+      drawer: _buildDrawer(),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _error.isNotEmpty
+              ? Center(child: Text(_error))
+              : TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildListView(),
+                    _buildFolderView(),
+                    _buildMapView(),
+                  ],
+                ),
     );
+  }
+
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(color: Colors.blue),
+            child: Text('Journey Journal',
+                style: TextStyle(color: Colors.white, fontSize: 24)),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.map),
+            title: const Text('My Trips'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.add),
+            title: const Text('Create'),
+            onTap: () {
+              // TODO: Navigate to create trip page
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Log out'),
+            onTap: () {
+              // TODO: Implement logout functionality
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildListView() {
+    return ListView.builder(
+      itemCount: _trips.length,
+      itemBuilder: (context, index) {
+        return TripListItem(
+          trip: _trips[index],
+          onDelete: _deleteTrip,
+          onEdit: _editTrip,
+        );
+      },
+    );
+  }
+
+  Widget _buildFolderView() {
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: _folders.length,
+      itemBuilder: (context, index) {
+        return FolderGridItem(
+          folder: _folders[index],
+          onTap: () {
+            // TODO: Navigate to folder contents
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildMapView() {
+    // TODO: Implement map view
+    return const Center(child: Text('Map View - To be implemented'));
   }
 }
