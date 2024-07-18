@@ -55,17 +55,17 @@ class ApiService{
       }
     }
 //add post
-  static Future<Map<String, dynamic>> addEntry
+static Future<Map<String, dynamic>> addEntry
       (ObjectId userId,
   String title,
-  String description, String
+  String description, double rating, String
   location) async {
     final url = Uri.parse('$baseUrl/addEntry');
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({ 'userId': userId, 'title': title, 'description': description, 'location': location}),
+        body: jsonEncode({ 'userId': userId, 'title': title, 'description': description, 'rating': rating, 'location': location}),
       );
 
       if (response.statusCode == 200) {
