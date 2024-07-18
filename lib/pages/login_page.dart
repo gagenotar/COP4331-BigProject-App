@@ -79,7 +79,10 @@ class _LoginPageState extends State<LoginPage> {
               textController: _emailController, 
               label: 'Email Address',
               keyboard: 'email',
-              validator: RequiredValidator(errorText: "Email address required"),
+              validator: MultiValidator([
+                    RequiredValidator(errorText: "* Required"),
+                    EmailValidator(errorText: "Not a valid email address.")
+                    ]),
               autovalidate: _autovalidate,
             ),
         
