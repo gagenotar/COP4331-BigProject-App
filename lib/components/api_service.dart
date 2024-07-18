@@ -157,11 +157,11 @@ static Future<Map<String, dynamic>> addEntry
   }
 //searchMyEntries (change)
 
-  static Future<Map<String, dynamic>> searchMyEntries
+ static Future<Map<String, dynamic>> searchMyEntries
       (
       String search,
       String userId,) async {
-    final url = Uri.parse('$baseUrl/addEntry');
+    final url = Uri.parse('$baseUrl/searchMyEntries');
     try {
       final response = await http.post(
         url,
