@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:journey_journal_app/components/post.dart';
-import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/pages/settings_page.dart';
-
-
+import 'package:journey_journal_app/pages/add_entry_page.dart';
+import 'package:journey_journal_app/components/post.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
-    super.key,
+    Key? key,
     required this.credentials,
     required this.email,
-  });
+  }) : super(key: key);
 
   final Map<String, dynamic> credentials;
   final String email;
 
   @override
-  HomeScreenState createState() => HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final ScrollController scrollController = ScrollController();
   int selectedIndex = 0;
+  late String _email; // Declare a mutable variable for email
+
+  @override
+  void initState() {
+    super.initState();
+    _email = widget.email; // Initialize _email with initial value of email
+  }
 
   void onTabTapped(int index) {
     setState(() {
@@ -28,9 +33,15 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // Function to update email
+  void updateEmail(String newEmail) {
+    setState(() {
+      _email = newEmail; // Update _email using setState
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
     String name = widget.credentials['firstName'];
     if (name == "") {
       name = widget.credentials['username'];
@@ -40,17 +51,16 @@ class HomeScreenState extends State<HomeScreen> {
         leading: Padding(
           padding: const EdgeInsets.all(5.0),
           child: SizedBox(
-                height:40,
-                width:40,
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  fit: BoxFit.scaleDown,
-                )
+            height: 40,
+            width: 40,
+            child: Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.scaleDown,
+            ),
           ),
         ),
         title: Text('Hello $name'),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         selectedIconTheme: const IconThemeData(color: Colors.blue),
         selectedItemColor: Colors.black87,
@@ -58,26 +68,23 @@ class HomeScreenState extends State<HomeScreen> {
         currentIndex: selectedIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled, color: Color.fromRGBO(38, 38, 38, 0.4),),
+            icon: Icon(Icons.home_filled, color: Color.fromRGBO(38, 38, 38, 0.4)),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pin_drop,color: Color.fromRGBO(38, 38, 38, 0.4),),
+            icon: Icon(Icons.pin_drop, color: Color.fromRGBO(38, 38, 38, 0.4)),
             label: 'My Trips',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_box,color: Color.fromRGBO(38, 38, 38, 0.4),),
+            icon: Icon(Icons.add_box, color: Color.fromRGBO(38, 38, 38, 0.4)),
             label: 'Create',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle,color: Color.fromRGBO(38, 38, 38, 0.4),),
+            icon: Icon(Icons.account_circle, color: Color.fromRGBO(38, 38, 38, 0.4)),
             label: 'Profile',
-
           ),
         ],
       ),
-
-
       body: buildBody(selectedIndex),
     );
   }
@@ -111,14 +118,14 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildAddReviewScreen() {
-    return Center(
-      child: Text('Add Review Screen'),
-    );
+    return AddEntryPage();
   }
 
   Widget buildProfileScreen() {
-
-    return SettingsPage( credentials: widget.credentials,
-      email: widget.email,);
+    return SettingsPage(
+      credentials: widget.credentials,
+      email: _email, // Use _email instead of widget.email
+      updateEmailCallback: updateEmail,
+    );
   }
 }
