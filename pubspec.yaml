@@ -38,6 +38,11 @@ dependencies:
   google_fonts: ^6.2.1
   bson: ^5.0.4
   http: ^1.2.1
+  form_field_validator: ^1.1.0
+  image_picker: ^1.1.2
+  google_maps_flutter: ^2.7.0
+  custom_star_rating: ^0.0.1
+  file_picker: ^8.0.6
 
 dev_dependencies:
   flutter_test:
@@ -48,7 +53,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -66,11 +71,9 @@ flutter:
     - assets/images/logo.png
     - assets/images/test-photo.png
     - assets/images/profile-pic.png
-    - assets/images/
+
+    #   - images/profile-pic.png
   #   - images/a_dot_ham.jpeg
-
-
-    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
