@@ -91,13 +91,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     /* appBar: AppBar(
-        title: Text('Create Post'),
-        backgroundColor: Colors.blueAccent,
-      ),*/
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.amber[50]
+
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
