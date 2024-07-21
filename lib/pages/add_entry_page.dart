@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:typed_data';
-import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:journeyjournalapp/components/post.dart';
 
 class AddEntryPage extends StatefulWidget {
   @override
@@ -13,60 +13,77 @@ class _AddEntryPageState extends State<AddEntryPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  Uint8List? _imageData;
-  String? _imageName;
 
   Future<void> _submitEntry() async {
-    if (_imageData == null) {
-      _showErrorDialog('Please select an image.');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId'); // Fetch the userId
+
+    if (userId == null) {
+      _showErrorDialog('User not logged in');
       return;
     }
 
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api/addEntry'),
+    final url = Uri.parse('https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api/addEntry');
+    
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'userId': userId, // Use the fetched userId
+        'title': _titleController.text,
+        'description': _descriptionController.text,
+        'location': _locationController.text,
+      }),
     );
-
-    request.fields['title'] = _titleController.text;
-    request.fields['description'] = _descriptionController.text;
-    request.fields['location'] = _locationController.text;
-
-    var multipartFile = http.MultipartFile.fromBytes(
-      'image',
-      _imageData!,
-      filename: _imageName,
-    );
-
-    request.files.add(multipartFile);
-
-    var response = await request.send();
-    var responseData = await http.Response.fromStream(response);
 
     print('Response status: ${response.statusCode}');
-    print('Response body: ${responseData.body}');
+    print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      var responseJson = jsonDecode(responseData.body);
-      print('Entry added with ID: ${responseJson['_id']}');
-      Navigator.pop(context, true); // Pass true to indicate success
+      try {
+        var responseJson = jsonDecode(response.body);
+        print('Entry added with ID: ${responseJson['_id']}');
+        Navigator.pop(context, true); // Pass true to indicate success
+
+        // Show a success dialog with the response body
+        _showSuccessDialog('Entry added successfully!', response.body);
+      } catch (e) {
+        print('Error decoding JSON: $e');
+        _showErrorDialog('Unexpected response format.');
+      }
     } else {
       // Handle submission failure
       print('Failed to add entry');
-      _showErrorDialog('Error adding entry.');
+      _showErrorDialog('Error adding entry. Response: ${response.body}');
     }
   }
 
-  Future<void> _pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
+  void _showSuccessDialog(String message, String responseBody) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Success'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(message),
+            SizedBox(height: 10),
+            Text('Response Body:'),
+            Text(responseBody),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
     );
-
-    if (result != null && result.files.single.bytes != null) {
-      setState(() {
-        _imageData = result.files.single.bytes;
-        _imageName = result.files.single.name;
-      });
-    }
   }
 
   void _showErrorDialog(String message) {
@@ -90,17 +107,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Create Post'),
-        backgroundColor: Colors.blueAccent,
-      ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue[100]!, Colors.blue[400]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          // Add your decoration if needed
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -121,7 +130,6 @@ class _AddEntryPageState extends State<AddEntryPage> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -141,17 +149,6 @@ class _AddEntryPageState extends State<AddEntryPage> {
                         _buildTextField(_descriptionController, 'Description', maxLines: 3),
                         SizedBox(height: 10),
                         _buildTextField(_locationController, 'Location'),
-                        SizedBox(height: 20),
-                        _imageData == null
-                            ? Text('No image selected.')
-                            : Image.memory(_imageData!, height: 200),
-                        ElevatedButton(
-                          onPressed: _pickImage,
-                          child: Text('Upload Image'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white, backgroundColor: Colors.blueAccent,
-                          ),
-                        ),
                       ],
                     ),
                   ),
