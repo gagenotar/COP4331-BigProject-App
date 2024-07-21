@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyTripsPage(
           userId:
-              'dummy_user_id'), // Replace with actual user ID after implementing authentication
+              '6671b214613f5493b0afe5ca'), // TEST USER ID, CONSULT CHRIS & OLGA FOR FUTURE IMPLEMENTATION
     );
   }
 }
