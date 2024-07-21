@@ -1,20 +1,21 @@
 class Folder {
-  final String id;
-  final String name;
+  String name;
+  List<String> tripIds;
 
-  Folder({required this.id, required this.name});
+  Folder({required this.name, List<String>? tripIds}) : tripIds = tripIds ?? [];
 
-  factory Folder.fromJson(Map<String, dynamic> json) {
-    return Folder(
-      id: json['_id'],
-      name: json['name'],
-    );
+  void addTrip(String tripId) {
+    if (!tripIds.contains(tripId)) {
+      tripIds.add(tripId);
+    }
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-    };
+  void removeTrip(String tripId) {
+    tripIds.remove(tripId);
+  }
+
+  @override
+  String toString() {
+    return 'Folder(name: $name, tripIds: $tripIds)';
   }
 }
