@@ -211,26 +211,6 @@ Future<void> updateProfileById(String userId, String login, String password) asy
   }
 }
 
-Future<void> createEntry(String title, dynamic location, int rating, String description, String image) async {
-  final url = Uri.parse('$baseUrl/createEntry');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'title': title,
-      'location': location,
-      'rating': rating,
-      'description': description,
-      'image': image,
-    }),
-  );
 
-  if (response.statusCode == 201) {
-    var data = jsonDecode(response.body);
-    // handle response data as needed
-  } else {
-    print('Failed to create trip with status code ${response.statusCode}');
-  }
-}
 
 }
