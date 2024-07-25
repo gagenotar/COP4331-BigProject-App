@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../components/trip.dart';
-import 'package:journey_journal_app/components/api_service_dart';
+import 'package:journey_journal_app/components/api_service.dart';
 
 class AddEntryPage extends StatefulWidget {
-  final String? userId;
+  final String userId;
 
-  const AddEntryPage({Key? key, required this.userId}) : super(key: key);
+  const AddEntryPage({Key? key, required this.userId,}) : super(key: key);
 
   @override
   _AddEntryPageState createState() => _AddEntryPageState();
