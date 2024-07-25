@@ -255,56 +255,67 @@ class _MyTripsPageState extends State<MyTripsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Trips'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'List View'),
-            Tab(text: 'Folder View'),
-          ],
+    return DefaultTabController(
+      length: 2, // Number of tabs
+      initialIndex: 0, // Initial tab index if needed
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: Container(
+            color: Colors.yellow[50], // Customize color as needed
+            child: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  TabBar(
+                    tabs: const [
+                      Tab(text: 'List View'),
+                      Tab(text: 'Folder View'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _error.isNotEmpty
-          ? Center(child: Text(_error))
-          : RefreshIndicator(
-        onRefresh: _fetchTrips,
-        child: TabBarView(
-          controller: _tabController,
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : _error.isNotEmpty
+            ? Center(child: Text(_error))
+            : RefreshIndicator(
+          onRefresh: _fetchTrips,
+          child: TabBarView(
+            children: [
+              _buildListView(),
+              FolderView(
+                folders: _folders,
+                trips: _trips,
+                onCreateFolder: _createFolder,
+                onAddTripToFolder: _addTripToFolder,
+                onRemoveTripFromFolder: _removeTripFromFolder,
+                onDeleteTrip: (tripId) {
+                  final trip = _trips.firstWhere((t) => t.id == tripId);
+                  _showDeleteConfirmationDialog(context, trip);
+                },
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _buildListView(),
-            FolderView(
-              folders: _folders,
-              trips: _trips,
-              onCreateFolder: _createFolder,
-              onAddTripToFolder: _addTripToFolder,
-              onRemoveTripFromFolder: _removeTripFromFolder,
-              onDeleteTrip: (tripId) {
-                final trip = _trips.firstWhere((t) => t.id == tripId);
-                _showDeleteConfirmationDialog(context, trip);
-              },
+            FloatingActionButton(
+              onPressed: () => _navigateToAddEntryPage(context),
+              child: Icon(Icons.add),
+              heroTag: 'addTrip',
+            ),
+            SizedBox(height: 16),
+            FloatingActionButton(
+              onPressed: () => _showCreateFolderDialog(context),
+              child: Icon(Icons.create_new_folder),
+              heroTag: 'addFolder',
             ),
           ],
         ),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () => _navigateToAddEntryPage(context),
-            child: Icon(Icons.add),
-            heroTag: 'addTrip',
-          ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: () => _showCreateFolderDialog(context),
-            child: Icon(Icons.create_new_folder),
-            heroTag: 'addFolder',
-          ),
-        ],
       ),
     );
   }
