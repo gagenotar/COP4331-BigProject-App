@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/pages/settings_page.dart';
-import 'package:journey_journal_app/pages/add_entry_page.dart';
+//import 'package:journey_journal_app/pages/add_entry_page.dart'; //original version
+//import 'package:journey_journal_app/pages/add_entry_page_1.dart'; //jason new ver
+import 'package:journey_journal_app/pages/add_entry_page_2.dart'; // tyler ver
 import 'package:journey_journal_app/components/post.dart';
+import 'package:journey_journal_app/pages/my_trips_page.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key? key,
@@ -44,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     String name = widget.credentials['firstName'];
     if (name == "") {
-      name = widget.credentials['username'];
+      name = widget.credentials['login'];
     }
     return Scaffold(
       appBar: AppBar(
@@ -105,26 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildHomeScreen() {
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      children: <Widget>[],
-    );
+   return ListView(       
+     padding: const EdgeInsets.symmetric(horizontal: 8),       
+     children: <Widget>[],    
+   );
   }
 
+
   Widget buildListScreen() {
-    return Center(
-      child: Text('List Screen'),
-    );
+    return MyTripsPage(userId:'${widget.credentials['_id']}' );
+
   }
 
   Widget buildAddReviewScreen() {
-    return AddEntryPage();
+    return AddEntryPage(userId:'${widget.credentials['_id']}' );
   }
 
   Widget buildProfileScreen() {
     return SettingsPage(
       credentials: widget.credentials,
-      email: _email, 
+      email: _email,
     );
   }
 }
