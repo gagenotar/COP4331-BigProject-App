@@ -47,6 +47,9 @@ class ApiService{
         if (response.statusCode == 200) {
         return jsonDecode(response.body);
         } 
+        if (response.statusCode == 400) {
+          throw "User already exists";
+        }
         else {
           throw "Had trouble connecting. Try again later";
         }
@@ -54,6 +57,34 @@ class ApiService{
         throw "Had trouble connecting. Try again later";
       }
     }
+  
+  //verify code
+  static Future<Map<String, dynamic>> verifyCode(String email, String code) async {
+    final url = Uri.parse('$baseUrl/verify-code');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email,'code': code}),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } 
+      
+      if (response.statusCode == 400) {
+        throw "Invalid code";
+      }
+
+      else {
+        throw "Had trouble connecting. Try again later";
+      }
+
+    } on http.ClientException {
+      throw "Had trouble connecting. Try again later";
+    }
+  }
+
 //add post
   static Future<Map<String, dynamic>> addEntry
       (ObjectId userId,

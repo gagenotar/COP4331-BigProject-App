@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:journey_journal_app/pages/email_verification_page.dart';
 
 import 'package:journey_journal_app/pages/login_page.dart';
 
@@ -7,6 +8,7 @@ import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/components/l_r_entry_box.dart';
 
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -247,6 +249,15 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Future<void> _launchEmailVerification() async {
+    final Uri url = Uri(scheme: 'https', host: "www.google.com");
+
+    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)){
+      throw Exception('Could not launch $url');
+    }
+  }
+
+
   void _doRegister() async{
     String firstName = _firstNameController.text;
     String lastName = _lastNameController.text;
@@ -258,19 +269,26 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formkey.currentState!.validate()) {
     
       setState(() => _isLoading = true);
-      var post = ApiService.register(firstName, lastName, email, username, password);
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EmailVerificationPage(email: email, password: password)),
+        );
+
+// commented out for testing purposes
+/*       var post = ApiService.register(firstName, lastName, email, username, password);
 
       post.then((var res) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (context) => EmailVerificationPage(email: email, password: password)),
         );
       }).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e)),
         );
         setState(() => _isLoading = false);
-      });
+      }); */
     } 
     else {
       setState(() => _isLoading = false);
