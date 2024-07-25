@@ -59,11 +59,12 @@ class _AddEntryPageState extends State<AddEntryPage> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final newTrip = await ApiService().addEntry(
+        final newTrip = await ApiService.addEntry(
           userId: widget.userId,
           title: _titleController.text,
           description: _descriptionController.text,
           location: _locationController.text,
+          
           rating: 0, // Provide a default rating value if needed
           imagePath: null, // Provide null or a valid path to imagePath
         );

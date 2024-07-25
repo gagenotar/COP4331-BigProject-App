@@ -107,7 +107,7 @@ class _EditTripPageState extends State<EditTripPage> {
         );
 
         // Call editEntryByID method from ApiService
-        final editedTrip = await ApiService().editEntryByID(
+        final editedTrip = await ApiService.editEntryByID(
           widget.trip.id,
           title: _titleController.text,
           description: _descriptionController.text,

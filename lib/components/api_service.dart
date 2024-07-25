@@ -61,7 +61,7 @@ static Future<void> register(String firstName, String lastName, String email, St
   }
 }
 
-Future<void> refreshToken(String refreshToken) async {
+static Future<void> refreshToken(String refreshToken) async {
   final url = Uri.parse('$baseUrl/auth/refreshToken');
   final response = await http.post(
     url,
@@ -80,7 +80,8 @@ Future<void> refreshToken(String refreshToken) async {
     print(response.body);
   }
 }
-Future<void> logout() async {
+
+static Future<void> logout() async {
   final url = Uri.parse('$baseUrl/auth/logout');
   final response = await http.post(
     url,
@@ -96,7 +97,7 @@ Future<void> logout() async {
   }
 }
 
-  Future<Trip> addEntry({
+static Future<Trip> addEntry({
     required String userId,
     required String title,
     String description = '',
@@ -128,8 +129,8 @@ Future<void> logout() async {
     }
   }
 
-Future<void> deleteEntryByID(String entryId) async {
-  final url = Uri.parse('$baseUrl/deleteEntry/$entryId');
+static Future<void> deleteEntryByID(String entryId) async {
+  final url = Uri.parse('$baseUrl/app/deleteEntry/$entryId');
   final response = await http.delete(url);
 
   if (response.statusCode == 200) {
@@ -139,14 +140,14 @@ Future<void> deleteEntryByID(String entryId) async {
   }
 }
 
-  Future<Map<String, dynamic>> editEntryByID(String entryId, {
+static Future<Map<String, dynamic>> editEntryByID(String entryId, {
     String? title,
     String? description,
     dynamic location,
     int? rating,
     String? imagePath,
   }) async {
-    final url = Uri.parse('$baseUrl/editEntry/$entryId');
+    final url = Uri.parse('$baseUrl/app/editEntry/$entryId');
 
     var request = http.MultipartRequest('PUT', url);
     if (title != null) request.fields['title'] = title;
@@ -167,8 +168,8 @@ Future<void> deleteEntryByID(String entryId) async {
       throw http.ClientException('Failed to edit entry with status code ${response.statusCode}');
     }
   }
-Future<void> getEntryById(String entryId) async {
-    final url = Uri.parse('$baseUrl/getEntry/$entryId');
+  static Future<void> getEntryById(String entryId) async {
+    final url = Uri.parse('$baseUrl/app/getEntry/$entryId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -181,8 +182,8 @@ Future<void> getEntryById(String entryId) async {
 
 
 
-Future<void> searchEntries(String search, String userId) async {
-  final url = Uri.parse('$baseUrl/searchEntries');
+static Future<List<dynamic>> searchEntries(String search, String userId) async {
+  final url = Uri.parse('$baseUrl/app/searchEntries');
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},
@@ -191,17 +192,20 @@ Future<void> searchEntries(String search, String userId) async {
 
   if (response.statusCode == 200) {
     List<dynamic> results = jsonDecode(response.body);
+    return results;
     // handle results as needed
   } else {
-    print('Search failed with status code ${response.statusCode}');
+    throw 'Search failed with status code ${response.statusCode}';
   }
 }
 
-  Future<List<Trip>> searchMyEntries(String search, String userId) async {
-    final url = Uri.parse('$baseUrl/searchMyEntries');
+static Future<List<Trip>> searchMyEntries(String search, String userId) async {
+    final url = Uri.parse('$baseUrl/app/searchMyEntries');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: jsonEncode({'search': search, 'userId': userId}),
     );
 
@@ -215,8 +219,8 @@ Future<void> searchEntries(String search, String userId) async {
     }
   }
 
-Future<void> getProfileById(String userId) async {
-  final url = Uri.parse('$baseUrl/profile/$userId');
+static Future<void> getProfileById(String userId) async {
+  final url = Uri.parse('$baseUrl/app/profile/$userId');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
@@ -227,8 +231,8 @@ Future<void> getProfileById(String userId) async {
   }
 }
 
-Future<void> updateProfileById(String userId, String login, String password) async {
-  final url = Uri.parse('$baseUrl/updateProfile/$userId');
+static Future<void> updateProfileById(String userId, String login, String password) async {
+  final url = Uri.parse('$baseUrl/app/updateProfile/$userId');
   final response = await http.put(
     url,
     headers: {'Content-Type': 'application/json'},
@@ -241,6 +245,5 @@ Future<void> updateProfileById(String userId, String login, String password) asy
     print('Failed to update profile with status code ${response.statusCode}');
   }
 }
-
 
 }

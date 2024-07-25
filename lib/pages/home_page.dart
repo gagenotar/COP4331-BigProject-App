@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/pages/settings_page.dart';
 //import 'package:journey_journal_app/pages/add_entry_page.dart'; //original version
@@ -25,10 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
   late String _email; // Declare a mutable variable for email
 
+  late Future<List<dynamic>> _posts;
+
   @override
   void initState() {
     super.initState();
     _email = widget.email; // Initialize _email with initial value of email
+    _posts = ApiService.searchEntries("", "");
   }
 
   void onTabTapped(int index) {
@@ -46,10 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String name = widget.credentials['firstName'];
-    if (name == "") {
-      name = widget.credentials['login'];
-    }
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -63,7 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        title: Text('Hello $name'),
+        title: Text(
+          "HOME",
+          style:GoogleFonts.anton(
+                color: Colors.black,
+                fontSize:30
+              ),
+        )
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedIconTheme: const IconThemeData(color: Colors.blue),
@@ -96,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildBody(int index) {
     switch (index) {
       case 0:
-        return buildHomeScreen();
+        return buildHomeScreen(context);
       case 1:
         return buildListScreen();
       case 2:
@@ -104,15 +110,25 @@ class _HomeScreenState extends State<HomeScreen> {
       case 3:
         return buildProfileScreen();
       default:
-        return buildHomeScreen(); // Default to HomeScreen
+        return buildHomeScreen(context); // Default to HomeScreen
     }
   }
 
-  Widget buildHomeScreen() {
-   return ListView(       
-     padding: const EdgeInsets.symmetric(horizontal: 8),       
-     children: <Widget>[],    
-   );
+  Widget buildHomeScreen(BuildContext context) {
+    return FutureBuilder<List<dynamic>>(
+      future: _posts,
+      builder: (context,snapshot){
+        return snapshot.hasData
+          ? ListView.builder(
+              itemCount: snapshot.data?.length,
+              itemBuilder: (_, position){
+                return Post.fromJson(snapshot.data![position]);
+              },
+            )
+          : const Center(
+              child: CircularProgressIndicator()
+            );
+    });
   }
 
 

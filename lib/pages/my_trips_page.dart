@@ -47,7 +47,7 @@ class _MyTripsPageState extends State<MyTripsPage>
     });
 
     try {
-      final trips = await ApiService().searchMyEntries('', widget.userId);
+      final trips = await ApiService.searchMyEntries('', widget.userId);
 
       setState(() {
         _trips = List<Trip>.from(trips); // Make a copy of the list to avoid mutating original list
@@ -90,7 +90,7 @@ class _MyTripsPageState extends State<MyTripsPage>
 
   Future<void> _deleteTrip(String tripId) async {
     try {
-      await ApiService().deleteEntryByID(tripId);
+      await ApiService.deleteEntryByID(tripId);
       setState(() {
         _trips.removeWhere((trip) => trip.id == tripId);
         for (var folder in _folders) {
