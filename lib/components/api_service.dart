@@ -1,29 +1,40 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:journey_journal_app/components/trip.dart'; //might change this depending on how tyler add things
+
 
 
 class ApiService{
   static const String baseUrl =
       'https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api';
 
-static Future<void> login(String email, String password) async {
-  final url = Uri.parse('$baseUrl/auth/login');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'email': email, 'password': password}),
-  );
+  static Future<Map<String, dynamic>> login(String email, String password) async {
+    final url = Uri.parse('$baseUrl/auth/login');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
 
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body);
-    var accessToken = data['accessToken'];
-    var userId = data['id'];
-    // handle accessToken and userId as needed
-  } else {
-    print('Login failed with status code ${response.statusCode}');
-    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var accessToken = data['accessToken'];
+      var userId = data['id'];
+      // You should construct the Map<String, dynamic> that represents your credentials
+      var credentials = {
+        'accessToken': accessToken,
+        'userId': userId,
+      };
+      return credentials;
+    }
+    else {
+      print('Login failed with status code ${response.statusCode}');
+      print(response.body);
+      // Throw an exception or handle the error as needed
+      throw Exception('Failed to login');
+    }
   }
-}
+
 
 static Future<void> register(String firstName, String lastName, String email, String login, String password) async {
   final url = Uri.parse('$baseUrl/auth/register');
@@ -78,36 +89,46 @@ Future<void> logout() async {
 
   if (response.statusCode == 200) {
     print('Logged out successfully');
-  } else {
+  }
+  else {
     print('Logout failed with status code ${response.statusCode}');
     print(response.body);
   }
 }
 
-Future<void> addEntry(String userId, String title, String description, dynamic location, int rating, String imagePath) async {
-  final url = Uri.parse('$baseUrl/addEntry');
-  var request = http.MultipartRequest('POST', url);
-  request.fields['userId'] = userId;
-  request.fields['title'] = title;
-  request.fields['description'] = description;
-  request.fields['location'] = jsonEncode(location);
-  request.fields['rating'] = rating.toString();
-  if (imagePath != null) {
-    request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+  Future<Trip> addEntry({
+    required String userId,
+    required String title,
+    String description = '',
+    String location = '',
+    int rating = 0,
+    String? imagePath,
+  }) async {
+    final url = Uri.parse('$baseUrl/addEntry');
+
+    var request = http.MultipartRequest('POST', url);
+    request.fields['userId'] = userId;
+    request.fields['title'] = title;
+    request.fields['description'] = description;
+    request.fields['location'] = location;
+    request.fields['rating'] = rating.toString();
+
+    if (imagePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      var data = jsonDecode(responseBody);
+      return Trip.fromJson(data); // Convert server response to Trip object
+    } else {
+      throw http.ClientException('Failed to add entry with status code ${response.statusCode}');
+    }
   }
 
-  var response = await request.send();
-  if (response.statusCode == 200) {
-    var responseBody = await response.stream.bytesToString();
-    var data = jsonDecode(responseBody);
-    var entryId = data['_id'];
-    // handle entryId as needed
-  } else {
-    print('Failed to add entry with status code ${response.statusCode}');
-  }
-}
-
-Future<void> deleteEntryById(String entryId) async {
+Future<void> deleteEntryByID(String entryId) async {
   final url = Uri.parse('$baseUrl/deleteEntry/$entryId');
   final response = await http.delete(url);
 
@@ -118,38 +139,46 @@ Future<void> deleteEntryById(String entryId) async {
   }
 }
 
-Future<void> editEntryById(String entryId, {String? title, String? description, dynamic location, int? rating, String? imagePath}) async {
-  final url = Uri.parse('$baseUrl/editEntry/$entryId');
+  Future<Map<String, dynamic>> editEntryByID(String entryId, {
+    String? title,
+    String? description,
+    dynamic location,
+    int? rating,
+    String? imagePath,
+  }) async {
+    final url = Uri.parse('$baseUrl/editEntry/$entryId');
 
-  var request = http.MultipartRequest('PUT', url);
-  if (title != null) request.fields['title'] = title;
-  if (description != null) request.fields['description'] = description;
-  if (location != null) request.fields['location'] = jsonEncode(location);
-  if (rating != null) request.fields['rating'] = rating.toString();
-  if (imagePath != null) {
-    request.files.add(await http.MultipartFile.fromPath('image', imagePath));
-  }
+    var request = http.MultipartRequest('PUT', url);
+    if (title != null) request.fields['title'] = title;
+    if (description != null) request.fields['description'] = description;
+    if (location != null) request.fields['location'] = jsonEncode(location);
+    if (rating != null) request.fields['rating'] = rating.toString();
+    if (imagePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', imagePath));
+    }
 
-  var response = await request.send();
-  if (response.statusCode == 200) {
-    var responseBody = await response.stream.bytesToString();
-    var updatedEntry = jsonDecode(responseBody);
-    // handle updatedEntry as needed
-  } else {
-    print('Failed to edit entry with status code ${response.statusCode}');
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      var updatedEntry = jsonDecode(responseBody);
+      return updatedEntry; // Return the updated entry as Map<String, dynamic>
+    } else {
+      print('Failed to edit entry with status code ${response.statusCode}');
+      throw http.ClientException('Failed to edit entry with status code ${response.statusCode}');
+    }
   }
-}
 Future<void> getEntryById(String entryId) async {
-  final url = Uri.parse('$baseUrl/getEntry/$entryId');
-  final response = await http.get(url);
+    final url = Uri.parse('$baseUrl/getEntry/$entryId');
+    final response = await http.get(url);
 
-  if (response.statusCode == 200) {
-    var entry = jsonDecode(response.body);
-    // handle entry as needed
-  } else {
-    print('Failed to fetch entry with status code ${response.statusCode}');
+    if (response.statusCode == 200) {
+      var entry = jsonDecode(response.body);
+      // handle entry as needed
+    } else {
+      print('Failed to fetch entry with status code ${response.statusCode}');
+    }
   }
-}
+
 
 
 Future<void> searchEntries(String search, String userId) async {
@@ -168,21 +197,23 @@ Future<void> searchEntries(String search, String userId) async {
   }
 }
 
-Future<void> searchMyEntries(String search, String userId) async {
-  final url = Uri.parse('$baseUrl/searchMyEntries');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'search': search, 'userId': userId}),
-  );
+  Future<List<Trip>> searchMyEntries(String search, String userId) async {
+    final url = Uri.parse('$baseUrl/searchMyEntries');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'search': search, 'userId': userId}),
+    );
 
-  if (response.statusCode == 200) {
-    List<dynamic> results = jsonDecode(response.body);
-    // handle results as needed
-  } else {
-    print('Search failed with status code ${response.statusCode}');
+    if (response.statusCode == 200) {
+      List<dynamic> results = jsonDecode(response.body);
+      List<Trip> trips = results.map((data) => Trip.fromJson(data)).toList();
+      return trips;
+    } else {
+      print('Search failed with status code ${response.statusCode}');
+      throw Exception('Failed to search entries');
+    }
   }
-}
 
 Future<void> getProfileById(String userId) async {
   final url = Uri.parse('$baseUrl/profile/$userId');
@@ -210,7 +241,6 @@ Future<void> updateProfileById(String userId, String login, String password) asy
     print('Failed to update profile with status code ${response.statusCode}');
   }
 }
-
 
 
 }
