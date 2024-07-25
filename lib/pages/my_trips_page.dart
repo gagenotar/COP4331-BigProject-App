@@ -2,15 +2,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../components/trip.dart';
 import '../components/folder.dart';
-import 'package:journey_journal_app/components/api_service_dart';
+import 'package:journey_journal_app/components/api_service.dart';
 import '../components/trip_card.dart';
 import '../components/folder_view.dart';
 import '../pages/add_entry_page_2.dart';
 import '../pages/edit_trip_page.dart';
 
 class MyTripsPage extends StatefulWidget {
-  const MyTripsPage({Key? key, required this.userId}) : super(key: key);
+  const MyTripsPage({Key? key,
+    required this.userId,}) :
+        super(key: key);
+
   final String userId;
+
   @override
   State<MyTripsPage> createState() => _MyTripsPageState();
 }
@@ -86,7 +90,7 @@ class _MyTripsPageState extends State<MyTripsPage>
 
   Future<void> _deleteTrip(String tripId) async {
     try {
-      await ApiService().deleteEntryById(tripId);
+      await ApiService().deleteEntryByID(tripId);
       setState(() {
         _trips.removeWhere((trip) => trip.id == tripId);
         for (var folder in _folders) {
@@ -133,8 +137,8 @@ class _MyTripsPageState extends State<MyTripsPage>
     final newTrip = await Navigator.push<Trip>(
       context,
       MaterialPageRoute(
-          builder: (context) => AddEntryPage(userId: widget.userId)),
-    );
+          builder: (context) => AddEntryPage(userId: widget.userId),
+    ));
     if (newTrip != null) {
       setState(() {
         _trips.add(newTrip);
