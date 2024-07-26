@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:file_picker/file_picker.dart';
-import 'package:journey_journal_app/components/post.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddEntryPage extends StatefulWidget {
+  const AddEntryPage({Key? key, this.onSuccess, required this.userId}) : super(key: key);
+
+  final Function()? onSuccess; // Define onSuccess callback
+  final String userId;
+
   @override
   _AddEntryPageState createState() => _AddEntryPageState();
 }
@@ -14,6 +18,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _ratingController = TextEditingController();
   Uint8List? _imageData;
   String? _imageName;
 
@@ -25,15 +30,17 @@ class _AddEntryPageState extends State<AddEntryPage> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api/addEntry'),
+      Uri.parse('https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api/app/addEntry'),
     );
 
+    request.fields['userId'] = widget.userId;
     request.fields['title'] = _titleController.text;
     request.fields['description'] = _descriptionController.text;
     request.fields['location'] = _locationController.text;
+    request.fields['rating'] = _ratingController.text;
 
     var multipartFile = http.MultipartFile.fromBytes(
-      'image',
+      'image', // Field name must match the server-side field name
       _imageData!,
       filename: _imageName,
     );
@@ -49,6 +56,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
     if (response.statusCode == 200) {
       var responseJson = jsonDecode(responseData.body);
       print('Entry added with ID: ${responseJson['_id']}');
+      if (widget.onSuccess != null) {
+        widget.onSuccess!(); // Call onSuccess callback if defined
+      }
       Navigator.pop(context, true); // Pass true to indicate success
     } else {
       // Handle submission failure
@@ -58,15 +68,22 @@ class _AddEntryPageState extends State<AddEntryPage> {
   }
 
   Future<void> _pickImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
+    try {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    if (result != null && result.files.single.bytes != null) {
-      setState(() {
-        _imageData = result.files.single.bytes;
-        _imageName = result.files.single.name;
-      });
+      if (image != null) {
+        print('Selected image: ${image.name}');
+        final Uint8List imageData = await image.readAsBytes();
+        setState(() {
+          _imageData = imageData;
+          _imageName = image.name;
+        });
+      } else {
+        print('No image selected or canceled.');
+      }
+    } catch (e) {
+      print('Error picking image: $e');
     }
   }
 
@@ -92,9 +109,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-
-        ),
+        decoration: BoxDecoration(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
@@ -114,7 +129,6 @@ class _AddEntryPageState extends State<AddEntryPage> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                    //  color: Colors.white,
                     ),
                   ),
                 ),
@@ -135,14 +149,22 @@ class _AddEntryPageState extends State<AddEntryPage> {
                         SizedBox(height: 10),
                         _buildTextField(_locationController, 'Location'),
                         SizedBox(height: 20),
+                        _buildTextField(_ratingController, 'Rating'),
+                        SizedBox(height: 20),
                         _imageData == null
                             ? Text('No image selected.')
-                            : Image.memory(_imageData!, width: 468),
+                            : Image.memory(
+                          _imageData!,
+                          width: 200, // Adjust width if needed
+                          height: 200, // Adjust height if needed
+                          fit: BoxFit.cover, // Adjust fit if needed
+                        ),
                         ElevatedButton(
                           onPressed: _pickImage,
                           child: Text('Upload Image'),
                           style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white, backgroundColor: Colors.blueAccent,
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blueAccent,
                           ),
                         ),
                       ],
@@ -155,7 +177,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
                     onPressed: _submitEntry,
                     child: Text('Add Post'),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: const Color.fromARGB(255, 0, 6, 15), backgroundColor: Colors.white,
+                      foregroundColor: Colors.black87,
+                      backgroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                       textStyle: TextStyle(fontSize: 16),
                       shape: RoundedRectangleBorder(
@@ -172,7 +195,9 @@ class _AddEntryPageState extends State<AddEntryPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String labelText, {int maxLines = 1, TextInputType keyboardType = TextInputType.text}) {
+  Widget _buildTextField(TextEditingController controller, String labelText,
+      {int maxLines = 1,
+        TextInputType keyboardType = TextInputType.text}) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
