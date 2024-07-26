@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data';
+import '../components/trip.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // Import the flutter_rating_bar package
 
 class AddEntryPage extends StatefulWidget {
   const AddEntryPage({Key? key, this.onSuccess, required this.userId}) : super(key: key);
@@ -17,16 +19,36 @@ class AddEntryPage extends StatefulWidget {
 class _AddEntryPageState extends State<AddEntryPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _ratingController = TextEditingController();
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  double _rating = 0.0; // Track rating as a double
   Uint8List? _imageData;
   String? _imageName;
+
+  String createLocationJson(String street, String city, String state, String country) {
+    final location = {
+      'street': street,
+      'city': city,
+      'state': state,
+      'country': country,
+    };
+    return jsonEncode(location); // Convert to JSON string
+  }
 
   Future<void> _submitEntry() async {
     if (_imageData == null) {
       _showErrorDialog('Please select an image.');
       return;
     }
+
+    String street = _streetController.text;
+    String city = _cityController.text;
+    String state = _stateController.text;
+    String country = _countryController.text;
+
+    String locationJson = createLocationJson(street, city, state, country);
 
     var request = http.MultipartRequest(
       'POST',
@@ -36,8 +58,8 @@ class _AddEntryPageState extends State<AddEntryPage> {
     request.fields['userId'] = widget.userId;
     request.fields['title'] = _titleController.text;
     request.fields['description'] = _descriptionController.text;
-    request.fields['location'] = _locationController.text;
-    request.fields['rating'] = _ratingController.text;
+    request.fields['location'] = locationJson;
+    request.fields['rating'] = _rating.toString(); // Convert rating to string
 
     var multipartFile = http.MultipartFile.fromBytes(
       'image', // Field name must match the server-side field name
@@ -147,16 +169,57 @@ class _AddEntryPageState extends State<AddEntryPage> {
                         SizedBox(height: 10),
                         _buildTextField(_descriptionController, 'Description', maxLines: 3),
                         SizedBox(height: 10),
-                        _buildTextField(_locationController, 'Location'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: _buildTextField(_streetController, 'Street'),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: _buildTextField(_cityController, 'City'),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: _buildTextField(_stateController, 'State'),
+                              ),
+                            ),
+                            Expanded(
+                              child: _buildTextField(_countryController, 'Country'),
+                            ),
+                          ],
+                        ),
                         SizedBox(height: 20),
-                        _buildTextField(_ratingController, 'Rating'),
+                        // Star rating bar
+                        RatingBar.builder(
+                          initialRating: _rating,
+                          minRating: 1,
+                          allowHalfRating: false,
+                          itemCount: 5,
+                          itemSize: 30.0,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              _rating = rating;
+                            });
+                          },
+                        ),
                         SizedBox(height: 20),
                         _imageData == null
                             ? Text('No image selected.')
                             : Image.memory(
                           _imageData!,
-                          width: 200, // Adjust width if needed
-                          height: 200, // Adjust height if needed
+                          width: 468, // Adjust width if needed
                           fit: BoxFit.cover, // Adjust fit if needed
                         ),
                         ElevatedButton(
@@ -194,6 +257,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
       ),
     );
   }
+
 
   Widget _buildTextField(TextEditingController controller, String labelText,
       {int maxLines = 1,
