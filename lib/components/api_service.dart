@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:journey_journal_app/components/trip.dart'; //might change this depending on how tyler add things
-
+import 'package:bson/bson.dart';
+import 'package:journey_journal_app/components/trip.dart';
+import 'package:flutter/foundation.dart';
 
 
 class ApiService{
@@ -36,68 +37,94 @@ class ApiService{
   }
 
 
-static Future<void> register(String firstName, String lastName, String email, String login, String password) async {
-  final url = Uri.parse('$baseUrl/auth/register');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
-      'login': login,
-      'password': password,
-    }),
-  );
+  static Future<void> register(String firstName, String lastName, String email, String login, String password) async {
+    final url = Uri.parse('$baseUrl/auth/register');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'firstName': firstName,
+        'lastName': lastName,
+        'email': email,
+        'login': login,
+        'password': password,
+      }),
+    );
 
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body);
-    var accessToken = data['accessToken'];
-    var userId = data['id'];
-    // handle accessToken and userId as needed
-  } else {
-    print('Registration failed with status code ${response.statusCode}');
-    print(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var accessToken = data['accessToken'];
+      var userId = data['id'];
+      // handle accessToken and userId as needed
+    } else {
+      print('Registration failed with status code ${response.statusCode}');
+      print(response.body);
+    }
   }
-}
 
-static Future<void> refreshToken(String refreshToken) async {
-  final url = Uri.parse('$baseUrl/auth/refreshToken');
-  final response = await http.post(
-    url,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cookie': 'refreshToken=$refreshToken',
-    },
-  );
+  static Future<Map<String, dynamic>> verifyCode(String email, String code) async {
+    final url = Uri.parse('$baseUrl/verify-code');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email,'code': code}),
+      );
 
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body);
-    var accessToken = data['accessToken'];
-    // handle accessToken as needed
-  } else {
-    print('Token refresh failed with status code ${response.statusCode}');
-    print(response.body);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+
+      if (response.statusCode == 400) {
+        throw "Invalid code";
+      }
+
+      else {
+        throw "Had trouble connecting. Try again later";
+      }
+
+    } on http.ClientException {
+      throw "Had trouble connecting. Try again later";
+    }
   }
-}
 
-static Future<void> logout() async {
-  final url = Uri.parse('$baseUrl/auth/logout');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-  );
+  static Future<void> refreshToken(String refreshToken) async {
+    final url = Uri.parse('$baseUrl/auth/refreshToken');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': 'refreshToken=$refreshToken',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    print('Logged out successfully');
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var accessToken = data['accessToken'];
+      // handle accessToken as needed
+    } else {
+      print('Token refresh failed with status code ${response.statusCode}');
+      print(response.body);
+    }
   }
-  else {
-    print('Logout failed with status code ${response.statusCode}');
-    print(response.body);
-  }
-}
 
-static Future<Trip> addEntry({
+  static Future<void> logout() async {
+    final url = Uri.parse('$baseUrl/auth/logout');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      print('Logged out successfully');
+    }
+    else {
+      print('Logout failed with status code ${response.statusCode}');
+      print(response.body);
+    }
+  }
+
+  static Future<Trip> addEntry({
     required String userId,
     required String title,
     String description = '',
@@ -129,18 +156,18 @@ static Future<Trip> addEntry({
     }
   }
 
-static Future<void> deleteEntryByID(String entryId) async {
-  final url = Uri.parse('$baseUrl/app/deleteEntry/$entryId');
-  final response = await http.delete(url);
+  static Future<void> deleteEntryByID(String entryId) async {
+    final url = Uri.parse('$baseUrl/app/deleteEntry/$entryId');
+    final response = await http.delete(url);
 
-  if (response.statusCode == 200) {
-    print('Entry deleted successfully');
-  } else {
-    print('Failed to delete entry with status code ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('Entry deleted successfully');
+    } else {
+      print('Failed to delete entry with status code ${response.statusCode}');
+    }
   }
-}
 
-static Future<Map<String, dynamic>> editEntryByID(String entryId, {
+  static Future<Map<String, dynamic>> editEntryByID(String entryId, {
     String? title,
     String? description,
     dynamic location,
@@ -182,68 +209,91 @@ static Future<Map<String, dynamic>> editEntryByID(String entryId, {
 
 
 
-static Future<List<dynamic>> searchEntries(String search, String userId) async {
-  final url = Uri.parse('$baseUrl/app/searchEntries');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'search': search, 'userId': userId}),
-  );
-
-  if (response.statusCode == 200) {
-    List<dynamic> results = jsonDecode(response.body);
-    return results;
-    // handle results as needed
-  } else {
-    throw 'Search failed with status code ${response.statusCode}';
-  }
-}
-
-static Future<List<Trip>> searchMyEntries(String search, String userId) async {
-    final url = Uri.parse('$baseUrl/app/searchMyEntries');
+  static Future<List<dynamic>> searchEntries(String search, String userId) async {
+    final url = Uri.parse('$baseUrl/app/searchEntries');
     final response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'search': search, 'userId': userId}),
     );
 
     if (response.statusCode == 200) {
       List<dynamic> results = jsonDecode(response.body);
-      List<Trip> trips = results.map((data) => Trip.fromJson(data)).toList();
-      return trips;
+      return results;
+      // handle results as needed
     } else {
-      print('Search failed with status code ${response.statusCode}');
-      throw Exception('Failed to search entries');
+      throw 'Search failed with status code ${response.statusCode}';
     }
   }
 
-static Future<void> getProfileById(String userId) async {
-  final url = Uri.parse('$baseUrl/app/profile/$userId');
-  final response = await http.get(url);
+  static Future<List<Trip>> searchMyEntries(
+      String search, String userId) async {
+    final url = Uri.parse('$baseUrl/app/searchMyEntries');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(<String, String>{
+          'search': search,
+          'userId': userId,
+        }),
+      );
 
-  if (response.statusCode == 200) {
-    var profile = jsonDecode(response.body);
-    // handle profile as needed
-  } else {
-    print('Failed to fetch profile with status code ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final dynamic jsonResponse = jsonDecode(response.body);
+
+        if (kDebugMode) {
+          debugPrint('API Response: $jsonResponse');
+        }
+
+        if (jsonResponse is List) {
+          return jsonResponse
+              .map((json) => Trip.fromJson(json as Map<String, dynamic>))
+              .toList();
+        } else if (jsonResponse is Map) {
+          // Handle case where response is a single object instead of a list
+          return [Trip.fromJson(jsonResponse as Map<String, dynamic>)];
+        } else {
+          throw Exception(
+              'Unexpected response format: ${jsonResponse.runtimeType}');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch entries: ${response.statusCode} ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Error in searchMyEntries: $e');
+      }
+      rethrow;
+    }
   }
-}
 
-static Future<void> updateProfileById(String userId, String login, String password) async {
-  final url = Uri.parse('$baseUrl/app/updateProfile/$userId');
-  final response = await http.put(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'login': login, 'password': password}),
-  );
+  static Future<void> getProfileById(String userId) async {
+    final url = Uri.parse('$baseUrl/app/profile/$userId');
+    final response = await http.get(url);
 
-  if (response.statusCode == 200) {
-    print('Profile updated successfully');
-  } else {
-    print('Failed to update profile with status code ${response.statusCode}');
+    if (response.statusCode == 200) {
+      var profile = jsonDecode(response.body);
+      // handle profile as needed
+    } else {
+      print('Failed to fetch profile with status code ${response.statusCode}');
+    }
   }
-}
+
+  static Future<void> updateProfileById(String userId, String login, String password) async {
+    final url = Uri.parse('$baseUrl/app/updateProfile/$userId');
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'login': login, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      print('Profile updated successfully');
+    } else {
+      print('Failed to update profile with status code ${response.statusCode}');
+    }
+  }
 
 }
