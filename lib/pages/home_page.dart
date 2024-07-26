@@ -145,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildProfileScreen() {
     return SettingsPage(
-      credentials: widget.credentials,
-      email: _email,
+      userId: '${widget.credentials['userId']}'
+
     );
   }
 }
