@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/pages/settings_page.dart';
-//import 'package:journey_journal_app/pages/add_entry_page.dart'; //original version
+import 'package:journey_journal_app/pages/add_entry_page.dart'; //original version
 //import 'package:journey_journal_app/pages/add_entry_page_1.dart'; //jason new ver
-import 'package:journey_journal_app/pages/add_entry_page_2.dart'; // tyler ver
+//import 'package:journey_journal_app/pages/add_entry_page_2.dart'; // tyler ver
 import 'package:journey_journal_app/components/post.dart';
 import 'package:journey_journal_app/pages/my_trips_page.dart';
 class HomeScreen extends StatefulWidget {
@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
     _email = widget.email; // Initialize _email with initial value of email
     _posts = ApiService.searchEntries("", "");
   }
@@ -52,24 +53,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.scaleDown,
+          leading: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: SizedBox(
+              height: 40,
+              width: 40,
+              child: Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.scaleDown,
+              ),
             ),
           ),
-        ),
-        title: Text(
-          "HOME",
-          style:GoogleFonts.anton(
+          title: Text(
+            "HOME",
+            style:GoogleFonts.anton(
                 color: Colors.black,
                 fontSize:30
-              ),
-        )
+            ),
+          )
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedIconTheme: const IconThemeData(color: Colors.blue),
@@ -116,29 +117,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildHomeScreen(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
-      future: _posts,
-      builder: (context,snapshot){
-        return snapshot.hasData
-          ? ListView.builder(
-              itemCount: snapshot.data?.length,
-              itemBuilder: (_, position){
-                return Post.fromJson(snapshot.data![position]);
-              },
-            )
-          : const Center(
+        future: _posts,
+        builder: (context,snapshot){
+          return snapshot.hasData
+              ? ListView.builder(
+            itemCount: snapshot.data?.length,
+            itemBuilder: (_, position){
+              return Post.fromJson(snapshot.data![position]);
+            },
+          )
+              : const Center(
               child: CircularProgressIndicator()
-            );
-    });
+          );
+        });
   }
 
 
   Widget buildListScreen() {
-    return MyTripsPage(userId:'${widget.credentials['_id']}' );
+
+    return MyTripsPage(userId:'${widget.credentials['userId']}' );
 
   }
 
   Widget buildAddReviewScreen() {
-    return AddEntryPage(userId:'${widget.credentials['_id']}' );
+    return AddEntryPage(userId:'${widget.credentials['userId']}' );
   }
 
   Widget buildProfileScreen() {
