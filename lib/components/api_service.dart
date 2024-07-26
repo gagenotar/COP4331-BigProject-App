@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:bson/bson.dart';
 import 'package:journey_journal_app/components/trip.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
+
 
 
 class ApiService{
@@ -135,7 +137,7 @@ class ApiService{
     final url = Uri.parse('$baseUrl/addEntry');
 
     var request = http.MultipartRequest('POST', url);
-    request.fields['userId'] = userId;
+    request.fields['userId'] = userId as String;
     request.fields['title'] = title;
     request.fields['description'] = description;
     request.fields['location'] = location;
@@ -167,7 +169,7 @@ class ApiService{
     }
   }
 
-  static Future<Map<String, dynamic>> editEntryByID(String entryId, {
+  static Future<Trip> editEntryByID(String entryId, {
     String? title,
     String? description,
     dynamic location,
@@ -188,13 +190,16 @@ class ApiService{
     var response = await request.send();
     if (response.statusCode == 200) {
       var responseBody = await response.stream.bytesToString();
-      var updatedEntry = jsonDecode(responseBody);
-      return updatedEntry; // Return the updated entry as Map<String, dynamic>
+      var responseData = jsonDecode(responseBody);
+      // Convert the response data to a Trip object
+      return Trip.fromJson(responseData);
     } else {
       print('Failed to edit entry with status code ${response.statusCode}');
       throw http.ClientException('Failed to edit entry with status code ${response.statusCode}');
     }
   }
+
+
   static Future<void> getEntryById(String entryId) async {
     final url = Uri.parse('$baseUrl/app/getEntry/$entryId');
     final response = await http.get(url);
@@ -269,15 +274,14 @@ class ApiService{
     }
   }
 
-  static Future<void> getProfileById(String userId) async {
+  static Future<Map<String, dynamic>> getProfileById(String userId) async {
     final url = Uri.parse('$baseUrl/app/profile/$userId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      var profile = jsonDecode(response.body);
-      // handle profile as needed
+      return jsonDecode(response.body); // Return profile data as a Map
     } else {
-      print('Failed to fetch profile with status code ${response.statusCode}');
+      throw Exception('Failed to fetch profile with status code ${response.statusCode}');
     }
   }
 
