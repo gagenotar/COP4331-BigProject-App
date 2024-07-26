@@ -5,9 +5,11 @@ import '../components/folder.dart';
 import 'package:journey_journal_app/components/api_service.dart';
 import '../components/trip_card.dart';
 import '../components/folder_view.dart';
-import '../pages/add_entry_page_2.dart';
+import '../pages/add_entry_page.dart';
 import '../pages/edit_trip_page.dart';
+import 'package:bson/bson.dart';
 
+import 'dart:convert';
 class MyTripsPage extends StatefulWidget {
   const MyTripsPage({Key? key,
     required this.userId,}) :
@@ -22,6 +24,7 @@ class MyTripsPage extends StatefulWidget {
 class _MyTripsPageState extends State<MyTripsPage>
     with SingleTickerProviderStateMixin {
   List<Trip> _trips = [];
+ // String? tripJSON;
   List<Folder> _folders = [];
   bool _isLoading = false;
   String _error = '';
@@ -40,18 +43,32 @@ class _MyTripsPageState extends State<MyTripsPage>
     super.dispose();
   }
 
+  bool isValidObjectId(String id) {
+    final regex = RegExp(r'^[a-fA-F0-9]{24}$');
+    return regex.hasMatch(id);
+  }
+
+// Usage in your _fetchTrips method
   Future<void> _fetchTrips() async {
     setState(() {
       _isLoading = true;
       _error = '';
     });
 
+    if (!isValidObjectId(widget.userId )) {
+      setState(() {
+
+        _error = 'Invalid userId format: ${widget.userId}';
+        _isLoading = false;
+      });
+      return;
+    }
+
     try {
       final trips = await ApiService.searchMyEntries('', widget.userId);
 
       setState(() {
-        _trips = List<Trip>.from(trips); // Make a copy of the list to avoid mutating original list
-        _trips.sort((a, b) => a.title.compareTo(b.title));
+        _trips = trips..sort((a, b) => a.title.compareTo(b.title));
         _isLoading = false;
       });
     } catch (e, stackTrace) {
@@ -65,6 +82,7 @@ class _MyTripsPageState extends State<MyTripsPage>
       });
     }
   }
+
 
 
   void _createFolder(String folderName) {
@@ -135,10 +153,10 @@ class _MyTripsPageState extends State<MyTripsPage>
 
   Future<void> _navigateToAddEntryPage(BuildContext context) async {
     final newTrip = await Navigator.push<Trip>(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AddEntryPage(userId: widget.userId),
-    ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddEntryPage(userId: widget.userId as String),
+        ));
     if (newTrip != null) {
       setState(() {
         _trips.add(newTrip);
