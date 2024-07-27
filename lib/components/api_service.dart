@@ -4,6 +4,8 @@ import 'package:bson/bson.dart';
 import 'package:journey_journal_app/components/trip.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart';
+
 
 
 
@@ -285,19 +287,55 @@ class ApiService{
     }
   }
 
-  static Future<void> updateProfileById(String userId, String login, String password) async {
-    final url = Uri.parse('$baseUrl/app/updateProfile/$userId');
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'login': login, 'password': password}),
-    );
+ static Future<void> updateProfileByID({
+    required String id,
+    String? login,
+    String? password,
+  }) async {
+    final uri = Uri.parse('$baseUrl/app/updateProfileByID/$id');
+    final headers = {
+      'Content-Type': 'application/json',
+    };
 
-    if (response.statusCode == 200) {
-      print('Profile updated successfully');
-    } else {
-      print('Failed to update profile with status code ${response.statusCode}');
+    // If password is provided, hash it
+    String? hashedPassword;
+    if (password != null) {
+      hashedPassword = _hashPassword(password);
+    }
+
+    // Construct request body
+    final body = jsonEncode({
+      'login': login,
+      'password': hashedPassword,
+    });
+
+    try {
+      // Make HTTP PUT request
+      final response = await http.put(
+        uri,
+        headers: headers,
+        body: body,
+      );
+
+      // Handle response
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('Profile updated successfully: $data');
+      } else {
+        final data = jsonDecode(response.body);
+        print('Failed to update profile: $data');
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 
+}
+
+
+String _hashPassword(String password) {
+  // Use SHA-256 hashing algorithm for the password
+  var bytes = utf8.encode(password); // Convert password to bytes
+  var digest = sha256.convert(bytes); // Hash password
+  return digest.toString(); // Return the hashed password as a string
 }
