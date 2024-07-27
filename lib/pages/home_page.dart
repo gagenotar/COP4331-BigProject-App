@@ -28,6 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late Future<List<dynamic>> _posts;
 
+  late Post _currentPost;
+
+  bool _postExpanded = false;
+
   @override
   void initState() {
     super.initState();
@@ -116,20 +120,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildHomeScreen(BuildContext context) {
+
+    if (_postExpanded){
+      return InkWell(
+        onTap: () {
+          setState(() => _postExpanded = false);
+        },
+        child: ExpandedPost.fromPost(_currentPost)
+      );
+    } 
+
     return FutureBuilder<List<dynamic>>(
-        future: _posts,
-        builder: (context,snapshot){
-          return snapshot.hasData
-              ? ListView.builder(
+      future: _posts,
+      builder: (context,snapshot){
+        return snapshot.hasData
+        ? ListView.builder(
             itemCount: snapshot.data?.length,
             itemBuilder: (_, position){
-              return Post.fromJson(snapshot.data![position]);
+              Post post = Post.fromJson(snapshot.data![position]);
+              return InkWell(
+                onTap: () {
+                  setState(() => _postExpanded = true);
+                  setState(() => _currentPost = post);
+                },
+                child: post,
+              );
             },
           )
-              : const Center(
-              child: CircularProgressIndicator()
+        : const Center(
+            child: CircularProgressIndicator()
           );
-        });
+      }
+    );
   }
 
 

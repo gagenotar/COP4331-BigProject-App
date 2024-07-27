@@ -104,6 +104,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                 animationDuration: Durations.long4,
                 backgroundColor: Colors.yellow.shade50,
                 errorAnimationController: _errorController,
+                keyboardType: TextInputType.number,
                 controller: _textController,
                 onCompleted: (v) {
                   _doConfirm();

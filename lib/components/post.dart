@@ -26,7 +26,7 @@ class Post extends StatelessWidget {
     dynamic image;
 
     try{
-      image = Image.network("$host${json['image']}", errorBuilder: (_, e, __) => const SizedBox.shrink());
+      image = Image.network("$host${json['image']}", fit: BoxFit.fitWidth, errorBuilder: (_, e, __) => const SizedBox.shrink());
     } catch (e){
       image = const SizedBox.shrink();
     }
@@ -38,7 +38,7 @@ class Post extends StatelessWidget {
       rating: json["rating"],
       image: image,
       date: DateTime.parse(json["date"]),
-      username: json["username"]
+      username: json["username"],
     );
   }
 
@@ -81,7 +81,10 @@ class Post extends StatelessWidget {
       
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
-                child: image,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: image
+                  ),
               ),
       
               Align(
@@ -90,8 +93,10 @@ class Post extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 24
+                    fontSize: 24,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
       
@@ -103,6 +108,8 @@ class Post extends StatelessWidget {
                     fontSize: 16,
                     color: Colors.black54
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
@@ -115,113 +122,118 @@ class Post extends StatelessWidget {
   }
 }
 
-class ExpandedPost extends Post {
+class ExpandedPost extends StatelessWidget{
   const ExpandedPost({
     super.key,
-    required super.title, 
-    required super.description, 
-    required super.location, 
-    required super.rating, 
-    super.image,
-    required super.date, 
-    required super.username
+    required this.title,
+    required this.description,
+    required this.location,
+    required this.rating,
+    this.image,
+    required this.date,
+    required this.username,
   });
-  
-  factory ExpandedPost.fromJson(Map<String, dynamic> json){
-    String host = "https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/";
-    dynamic image;
 
-    try{
-      image = Image.network("$host${json['image']}", errorBuilder: (_, e, __) => const SizedBox.shrink());
-    } catch (e){
-      image = const SizedBox.shrink();
-    }
-    
+  final String title;
+  final String description;
+  final Location location;
+  final int rating;
+  final dynamic image;
+  final DateTime date;
+  final String username;
+
+  factory ExpandedPost.fromPost(Post post){
     return ExpandedPost(
-      title: json["title"],
-      description: json["description"],
-      location: Location.fromJson(json["location"]),
-      rating: json["rating"],
-      image: image,
-      date: DateTime.parse(json["date"]),
-      username: json["username"]
+      title: post.title,
+      description: post.description,
+      location: post.location,
+      rating: post.rating,
+      image: post.image,
+      date: post.date,
+      username: post.username,
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Card(
-        // // height: 700,
-        elevation: 1,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      username,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+      child: SingleChildScrollView(
+        child: Card(
+          // // height: 700,
+          elevation: 1,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        username,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-      
-                    const SizedBox(width: 10),
-      
-                    Text(
-                      DateFormat('MM/dd/yyyy').format(date),
-                      style: const TextStyle(fontSize: 16, color: Colors.black54)
-                    ),
-                  ]
+        
+                      const SizedBox(width: 10),
+        
+                      Text(
+                        DateFormat('MM/dd/yyyy').format(date),
+                        style: const TextStyle(fontSize: 16, color: Colors.black54)
+                      ),
+                    ]
+                  ),
                 ),
-              ),
-      
-              Padding(
+        
+                Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
-                child: image,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: image
+                  ),
               ),
-      
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24
+        
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24
+                    ),
                   ),
                 ),
-              ),
-      
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  location.toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54
+        
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    location.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54
+                    ),
                   ),
                 ),
-              ),
-
-              const SizedBox(height:20)
-            ],
+        
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(description)
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
 
 class ExpandableText extends StatefulWidget {
   final String text;
@@ -263,7 +275,6 @@ class ExpandableTextState extends State<ExpandableText> {
 }
 
 class Location {
-  
   Location({
     required this.street, 
     required this.city, 
@@ -288,6 +299,12 @@ class Location {
   @override
   String toString()
   {
-    return "$street, $city, $state, $country";
+    List<String> address = [];
+    if (street != "") address.add(street);
+    if (city != "") address.add(city);
+    if (state != "") address.add(state);
+    if (country != "") address.add(country);
+
+    return address.join(', ');
   }
 }

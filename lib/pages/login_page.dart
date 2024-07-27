@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:journey_journal_app/pages/email_verification_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:journey_journal_app/components/api_service.dart';
