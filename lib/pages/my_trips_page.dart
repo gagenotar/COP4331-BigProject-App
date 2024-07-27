@@ -12,10 +12,12 @@ import 'package:bson/bson.dart';
 import 'dart:convert';
 class MyTripsPage extends StatefulWidget {
   const MyTripsPage({Key? key,
-    required this.userId,}) :
+    required this.credentials,
+    required this.email,}) :
         super(key: key);
 
-  final String userId;
+  final String email;
+  final Map<String, dynamic> credentials;
 
   @override
   State<MyTripsPage> createState() => _MyTripsPageState();
@@ -55,17 +57,17 @@ class _MyTripsPageState extends State<MyTripsPage>
       _error = '';
     });
 
-    if (!isValidObjectId(widget.userId )) {
+    if (!isValidObjectId('${widget.credentials['id']}'  )) {
       setState(() {
 
-        _error = 'Invalid userId format: ${widget.userId}';
+        _error = 'Invalid userId format: ${widget.credentials['id']}';
         _isLoading = false;
       });
       return;
     }
 
     try {
-      final trips = await ApiService.searchMyEntries('', widget.userId);
+      final trips = await ApiService.searchMyEntries('', widget.credentials['id']);
 
       setState(() {
         _trips = trips..sort((a, b) => a.title.compareTo(b.title));
@@ -155,7 +157,7 @@ class _MyTripsPageState extends State<MyTripsPage>
     final newTrip = await Navigator.push<Trip>(
         context,
         MaterialPageRoute(
-          builder: (context) => AddEntryPage(userId: widget.userId as String),
+          builder: (context) => AddEntryPage(credentials: widget.credentials, email: widget.email),
         ));
     if (newTrip != null) {
       setState(() {

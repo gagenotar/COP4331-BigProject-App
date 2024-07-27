@@ -13,31 +13,58 @@ class ApiService{
   static const String baseUrl =
       'https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api';
 
-  static Future<Map<String, dynamic>> login(String email, String password) async {
+//idk if this will work
+  static Future<Map<String, dynamic>> login(String login, String password) async {
     final url = Uri.parse('$baseUrl/auth/login');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'login': email, 'password': password}),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'login': login,
+        'password': password,
+      }),
     );
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      var accessToken = data['accessToken'];
-      var userId = data['id'];
-      // You should construct the Map<String, dynamic> that represents your credentials
-      var credentials = {
-        'accessToken': accessToken,
-        'userId': userId,
-      };
-      return credentials;
+    // Create a map to hold the result or error information
+    Map<String, dynamic> result = {};
+
+    try {
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+
+        // Extract necessary fields
+        final accessToken = data['accessToken'];
+        final id = data['id'];
+
+        // Print for debugging purposes
+        print('Access Token: $accessToken');
+        print('User ID: $id');
+
+        // Populate the result map
+        result['success'] = true;
+        result['accessToken'] = accessToken;
+        result['id'] = id;
+      } else {
+        // Handle unsuccessful responses
+        print('Failed to login: ${response.body}');
+
+        // Populate the result map with error information
+        result['success'] = false;
+        result['error'] = 'Failed to login: ${response.body}';
+      }
+    } catch (e) {
+      // Handle any exceptions that occur
+      print('Exception occurred: $e');
+
+      // Populate the result map with exception information
+      result['success'] = false;
+      result['error'] = 'Exception occurred: $e';
     }
-    else {
-      print('Login failed with status code ${response.statusCode}');
-      print(response.body);
-      // Throw an exception or handle the error as needed
-      throw Exception('Failed to login');
-    }
+
+    return result;
   }
 
 
@@ -45,8 +72,10 @@ class ApiService{
     final url = Uri.parse('$baseUrl/auth/register');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
         'firstName': firstName,
         'lastName': lastName,
         'email': email,
@@ -56,75 +85,76 @@ class ApiService{
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      var accessToken = data['accessToken'];
-      var userId = data['id'];
-      // handle accessToken and userId as needed
+      final data = jsonDecode(response.body);
+      final accessToken = data['accessToken'];
+      final id = data['id'];
+      final message = data['message'];
+      print('Access Token: $accessToken');
+      print('User ID: $id');
+      print('Message: $message');
     } else {
-      print('Registration failed with status code ${response.statusCode}');
-      print(response.body);
+      print('Failed to register: ${response.body}');
     }
   }
 
-  static Future<Map<String, dynamic>> verifyCode(String email, String code) async {
+  static Future<void> verifyCode(String email, String code) async {
     final url = Uri.parse('$baseUrl/auth/verify');
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email,'code': code}),
-      );
 
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      }
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'code': code,
+      }),
+    );
 
-      if (response.statusCode == 400) {
-        throw "Invalid code";
-      }
-
-      else {
-        throw "Had trouble connecting. Try again later";
-      }
-
-    } on http.ClientException {
-      throw "Had trouble connecting. Try again later";
+    if (response.statusCode == 200) {
+      final message = jsonDecode(response.body)['message'];
+      print('Message: $message');
+    } else {
+      print('Failed to verify code: ${response.body}');
     }
   }
 
   static Future<void> refreshToken(String refreshToken) async {
-    final url = Uri.parse('$baseUrl/auth/refreshToken');
+    final url = Uri.parse('$baseUrl/auth/refresh');
+
     final response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/json',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
         'Cookie': 'refreshToken=$refreshToken',
       },
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      var accessToken = data['accessToken'];
-      // handle accessToken as needed
+      final data = jsonDecode(response.body);
+      final accessToken = data['accessToken'];
+      print('Access Token: $accessToken');
     } else {
-      print('Token refresh failed with status code ${response.statusCode}');
-      print(response.body);
+      print('Failed to refresh token: ${response.body}');
     }
   }
 
-  static Future<void> logout() async {
+  static Future<void> logout(String refreshToken) async {
     final url = Uri.parse('$baseUrl/auth/logout');
+
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': 'refreshToken=$refreshToken',
+      },
     );
 
     if (response.statusCode == 200) {
-      print('Logged out successfully');
-    }
-    else {
-      print('Logout failed with status code ${response.statusCode}');
-      print(response.body);
+      final message = jsonDecode(response.body)['message'];
+      print('Message: $message');
+    } else {
+      print('Failed to logout: ${response.body}');
     }
   }
 
