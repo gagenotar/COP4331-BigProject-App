@@ -4,13 +4,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 import '../components/trip.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:journey_journal_app/pages/home_page.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart'; // Import the flutter_rating_bar package
 
 class AddEntryPage extends StatefulWidget {
-  const AddEntryPage({Key? key, this.onSuccess, required this.userId}) : super(key: key);
+  const AddEntryPage({Key? key, this.onSuccess, required this.credentials, required this.email}) : super(key: key);
 
   final Function()? onSuccess; // Define onSuccess callback
-  final String userId;
+  final Map<String, dynamic> credentials;
+  final String email;
 
   @override
   _AddEntryPageState createState() => _AddEntryPageState();
@@ -55,7 +57,7 @@ class _AddEntryPageState extends State<AddEntryPage> {
       Uri.parse('https://journey-journal-cop4331-71e6a1fdae61.herokuapp.com/api/app/addEntry'),
     );
 
-    request.fields['userId'] = widget.userId;
+    request.fields['userId'] = '${widget.credentials['id']}';
     request.fields['title'] = _titleController.text;
     request.fields['description'] = _descriptionController.text;
     request.fields['location'] = locationJson;
@@ -81,7 +83,10 @@ class _AddEntryPageState extends State<AddEntryPage> {
       if (widget.onSuccess != null) {
         widget.onSuccess!(); // Call onSuccess callback if defined
       }
-      Navigator.pop(context, true); // Pass true to indicate success
+      //potentially change to home page navigation
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => HomeScreen(credentials: widget.credentials, email: widget.email))
+      );
     } else {
       // Handle submission failure
       print('Failed to add entry');
