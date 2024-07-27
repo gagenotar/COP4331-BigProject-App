@@ -18,7 +18,7 @@ class ApiService{
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
+      body: jsonEncode({'login': email, 'password': password}),
     );
 
     if (response.statusCode == 200) {
@@ -67,7 +67,7 @@ class ApiService{
   }
 
   static Future<Map<String, dynamic>> verifyCode(String email, String code) async {
-    final url = Uri.parse('$baseUrl/verify-code');
+    final url = Uri.parse('$baseUrl/auth/verify');
     try {
       final response = await http.post(
         url,

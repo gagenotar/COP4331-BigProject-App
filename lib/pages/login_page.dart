@@ -186,13 +186,13 @@ class _LoginPageState extends State<LoginPage> {
       try {
         var credentials = await ApiService.login(email, password);
 
-        // Navigate to HomeScreen and pass credentials
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen(
             credentials: credentials,
             email: email, // Pass email to HomeScreen
           )),
+          (Route<dynamic> route) => false, 
         );
       } catch (e) {
         setState(() => _isLoading = false); // Reset loading state on error
