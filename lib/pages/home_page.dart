@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/pages/settings_page.dart';
-import 'package:journey_journal_app/pages/add_entry_page.dart'; //original version
-//import 'package:journey_journal_app/pages/add_entry_page_1.dart'; //jason new ver
-//import 'package:journey_journal_app/pages/add_entry_page_2.dart'; // tyler ver
+import 'package:journey_journal_app/pages/add_entry_page.dart';
 import 'package:journey_journal_app/components/post.dart';
 import 'package:journey_journal_app/pages/my_trips_page.dart';
+
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key? key,
@@ -135,17 +135,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildListScreen() {
 
-    return MyTripsPage(userId:'${widget.credentials['userId']}' );
+    return MyTripsPage(credentials: widget.credentials,
+        email: widget.email);
 
   }
 
   Widget buildAddReviewScreen() {
-    return AddEntryPage(userId:'${widget.credentials['userId']}' );
+    return AddEntryPage(
+      credentials: widget.credentials,
+      email: widget.email
+
+    );
   }
+
 
   Widget buildProfileScreen() {
     return SettingsPage(
-      userId: '${widget.credentials['userId']}'
+      userId: '${widget.credentials['id']}'
 
     );
   }
