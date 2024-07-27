@@ -57,20 +57,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Future<void> _submitChanges() async {
     if (_formKey.currentState!.validate()) {
       try {
-        // Log the data to be sent
-        print('Updating profile with:');
-        print('Login: ${_loginController.text}');
-        print('Password: ${_passwordController.text}');
-
-        await ApiService.updateProfileById(
-          widget.userId,
-          _loginController.text,
-          _passwordController.text,
+        await ApiService.updateProfileByID(
+          id: widget.userId,
+          login: _loginController.text,
+          password: _passwordController.text,
         );
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Profile updated successfully')),
         );
         // Optionally, re-fetch the profile data
+        _fetchProfileData();
       } catch (e) {
         print('Error updating profile: $e');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -79,7 +75,6 @@ class _SettingsPageState extends State<SettingsPage> {
       }
     }
   }
-
 
   @override
   void dispose() {
@@ -197,7 +192,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 onPressed: _submitChanges,
                 child: Text('Save Changes'),
                 style: ElevatedButton.styleFrom(
-                 // color: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 16),
                   shape: RoundedRectangleBorder(
