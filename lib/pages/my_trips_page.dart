@@ -10,11 +10,13 @@ import '../pages/edit_trip_page.dart';
 import 'package:bson/bson.dart';
 
 import 'dart:convert';
+
 class MyTripsPage extends StatefulWidget {
-  const MyTripsPage({Key? key,
+  const MyTripsPage({
+    Key? key,
     required this.credentials,
-    required this.email,}) :
-        super(key: key);
+    required this.email,
+  }) : super(key: key);
 
   final String email;
   final Map<String, dynamic> credentials;
@@ -23,14 +25,13 @@ class MyTripsPage extends StatefulWidget {
   State<MyTripsPage> createState() => _MyTripsPageState();
 }
 
-class _MyTripsPageState extends State<MyTripsPage>
-    with SingleTickerProviderStateMixin {
+class _MyTripsPageState extends State<MyTripsPage> with SingleTickerProviderStateMixin {
   List<Trip> _trips = [];
- // String? tripJSON;
   List<Folder> _folders = [];
   bool _isLoading = false;
   String _error = '';
   late TabController _tabController;
+  String _searchQuery = ''; // Add search query state
 
   @override
   void initState() {
@@ -50,16 +51,14 @@ class _MyTripsPageState extends State<MyTripsPage>
     return regex.hasMatch(id);
   }
 
-// Usage in your _fetchTrips method
   Future<void> _fetchTrips() async {
     setState(() {
       _isLoading = true;
       _error = '';
     });
 
-    if (!isValidObjectId('${widget.credentials['id']}'  )) {
+    if (!isValidObjectId('${widget.credentials['id']}')) {
       setState(() {
-
         _error = 'Invalid userId format: ${widget.credentials['id']}';
         _isLoading = false;
       });
@@ -67,7 +66,7 @@ class _MyTripsPageState extends State<MyTripsPage>
     }
 
     try {
-      final trips = await ApiService.searchMyEntries('', widget.credentials['id']);
+      final trips = await ApiService.searchMyEntries(_searchQuery, widget.credentials['id']);
 
       setState(() {
         _trips = trips..sort((a, b) => a.title.compareTo(b.title));
@@ -85,7 +84,12 @@ class _MyTripsPageState extends State<MyTripsPage>
     }
   }
 
-
+  Future<void> _searchTrips(String query) async {
+    setState(() {
+      _searchQuery = query;
+    });
+    await _fetchTrips(); // Fetch trips based on search query
+  }
 
   void _createFolder(String folderName) {
     setState(() {
@@ -148,7 +152,7 @@ class _MyTripsPageState extends State<MyTripsPage>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Trip "${editedTrip.title}" updated')),
       );
-    } else {
+    }else {
       print('No edited trip received'); // Debug print
     }
   }
@@ -279,22 +283,39 @@ class _MyTripsPageState extends State<MyTripsPage>
       length: 2, // Number of tabs
       initialIndex: 0, // Initial tab index if needed
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
-          child: Container(
-            color: Colors.yellow[50], // Customize color as needed
-            child: SafeArea(
-              child: Column(
-                children: <Widget>[
-                  TabBar(
-                    tabs: const [
-                      Tab(text: 'List View'),
-                      Tab(text: 'Folder View'),
-                    ],
+        appBar: AppBar(
+          backgroundColor: Colors.yellow[50], // Customize color as needed
+          title: Row(
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search trips...',
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.search),
                   ),
-                ],
+                  onChanged: (query) {
+                    _searchTrips(query); // Update search query and fetch trips
+                  },
+                ),
               ),
-            ),
+              IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  setState(() {
+                    _searchQuery = '';
+                  });
+                  _fetchTrips(); // Fetch all trips when search is cleared
+                },
+              ),
+            ],
+          ),
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'List View'),
+              Tab(text: 'Folder View'),
+            ],
           ),
         ),
         body: _isLoading
@@ -304,6 +325,7 @@ class _MyTripsPageState extends State<MyTripsPage>
             : RefreshIndicator(
           onRefresh: _fetchTrips,
           child: TabBarView(
+            controller: _tabController,
             children: [
               _buildListView(),
               FolderView(
@@ -340,4 +362,5 @@ class _MyTripsPageState extends State<MyTripsPage>
     );
   }
 }
+
 
