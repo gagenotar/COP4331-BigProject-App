@@ -48,7 +48,7 @@ class Post extends StatelessWidget {
       padding: const EdgeInsets.all(15.0),
       child: Card(
         // // height: 700,
-        elevation: 1,
+        elevation: 2,
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -58,7 +58,7 @@ class Post extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 5),
+                padding: const EdgeInsets.all(5),
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -80,39 +80,65 @@ class Post extends StatelessWidget {
               ),
       
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: image
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                child: Container(
+                  foregroundDecoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      )
+                    ),
+                    width: double.infinity,
+                  child: ClipRRect(borderRadius: BorderRadius.circular(20),child:image)
                   ),
               ),
       
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:5),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
       
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  location.toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:5),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    location.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:5),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
               const SizedBox(height:20)
             ],
           ),
@@ -229,45 +255,6 @@ class ExpandedPost extends StatelessWidget{
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ExpandableText extends StatefulWidget {
-  final String text;
-  const ExpandableText({super.key, required this.text});
-
-  @override
-  ExpandableTextState createState() => ExpandableTextState();
-}
-
-class ExpandableTextState extends State<ExpandableText> {
-  bool _expanded = false;
-
-  void toggleExpanded() {
-    setState(() {
-      _expanded = !_expanded;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: toggleExpanded,
-      child: AnimatedCrossFade(
-        duration: const Duration(milliseconds: 300),
-        crossFadeState: _expanded
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
-        firstChild: Text(
-          widget.text,
-        ),
-        secondChild: Text(
-          widget.text,
-          maxLines: _expanded ? null : 4,
-          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

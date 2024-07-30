@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: <Widget>[
                 const Flexible(
                   child: SizedBox(
-                    height:50
+                    height:105
                   )
                 ),
             

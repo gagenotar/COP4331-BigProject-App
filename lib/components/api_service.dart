@@ -119,6 +119,49 @@ class ApiService{
     }
   }
 
+  static Future<void> forgotPassword(String email) async {
+    final url = Uri.parse('$baseUrl/auth/forgot-password');
+
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'email': email}),
+    );
+
+    if (response.statusCode == 200) {
+      final message = jsonDecode(response.body)['message'];
+      print('Message: $message');
+    } 
+    else {
+      throw 'Failed to send code: ${response.body}';
+    }
+  }
+
+  static Future<void> resetPassword(String email, String code, String newPassword) async {
+    final url = Uri.parse('$baseUrl/auth/reset-password');
+
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'code': code,
+        'newPassword': newPassword
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final message = jsonDecode(response.body)['message'];
+      print('Message: $message');
+    } else {
+      throw 'Failed to verify code: ${response.body}';
+    }
+  }
+
   static Future<void> refreshToken(String refreshToken) async {
     final url = Uri.parse('$baseUrl/auth/refresh');
 

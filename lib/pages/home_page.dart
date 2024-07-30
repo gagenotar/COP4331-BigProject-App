@@ -9,10 +9,10 @@ import 'package:journey_journal_app/pages/my_trips_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.credentials,
     required this.email,
-  }) : super(key: key);
+  });
 
   final Map<String, dynamic> credentials;
   final String email;

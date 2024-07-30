@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:journey_journal_app/components/api_service.dart';
 import 'package:journey_journal_app/components/l_r_entry_box.dart';
 
 import 'package:journey_journal_app/pages/home_page.dart';
 import 'package:journey_journal_app/pages/register_page.dart';
+import 'package:journey_journal_app/pages/forgot_password_page.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -103,7 +103,12 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: AlignmentDirectional.centerEnd,
                     width: double.infinity,
                     child: TextButton(
-                        onPressed: () => _launchForgotPassword(),
+                        onPressed:() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                              );
+                            },
                         child: const Text(
                             'Forgot Password',
                             style:TextStyle(
@@ -190,14 +195,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
     );
-  }
-
-  Future<void> _launchForgotPassword() async {
-    final Uri url = Uri(scheme: 'https', host: "www.google.com");
-
-    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)){
-      throw Exception('Could not launch $url');
-    }
   }
 
   void _doLogin() async {
