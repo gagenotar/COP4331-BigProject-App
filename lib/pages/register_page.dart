@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:journey_journal_app/pages/email_verification_page.dart';
 
 import 'package:journey_journal_app/pages/login_page.dart';
 
@@ -46,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: <Widget>[
                 const Flexible(
                   child: SizedBox(
-                    height:50
+                    height:105
                   )
                 ),
             
@@ -213,7 +214,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       }, 
                       child: RichText(
@@ -263,7 +264,7 @@ class _RegisterPageState extends State<RegisterPage> {
       post.then((var res) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (_) => EmailVerificationPage(email: email, password: password)),
         );
       }).catchError((e) {
         ScaffoldMessenger.of(context).showSnackBar(
